@@ -75,7 +75,7 @@ function show_all_posts()
         $cat_id = $row['cat_id'];
         $cat_title = $row['cat_title'];
         $count_post_comments = mysqli_num_rows(mysqli_query($conn, "SELECT * FROM comments WHERE comment_post_id = $post_id"));
-        
+
         echo
         "<tr>
             <td><input type='checkbox' class='checkBoxes' name='checkBoxArray[]' value='$post_id' id=''></td>
@@ -227,52 +227,53 @@ function is_exists($col_name, $table_name, $row_name)
     return is_null($result) ? false : true;
 }
 
-function login_user($username, $password)
-{
-    global $conn;
+// function login_user($username, $password)
+// {
+//     global $conn;
 
 
-    $query = "SELECT * FROM users WHERE user_name = '$username'";
-    $login_query = mysqli_query($conn, $query);
-    if(mysqli_num_rows($login_query) <= 0) {
-        return false;
-    } else {
+//     $query = "SELECT * FROM users WHERE user_name = '$username'";
+//     $login_query = mysqli_query($conn, $query);
+//     if (mysqli_num_rows($login_query) <= 0) {
+//         // return false;
+//                 echo "<script>alert('da')</script>";
+//     } else {
 
-    while ($row = mysqli_fetch_array($login_query)) {
-        $db_id = $row['user_id'];
-        $db_user_name = $row['user_name'];
-        $db_user_password = $row['user_password'];
-        $db_user_firstname = $row['user_firstname'];
-        $db_user_lastname = $row['user_lastname'];
-        $db_user_email = $row['user_email'];
-        $db_user_image = $row['user_image'];
-        $db_user_role = $row['user_role'];
-        $db_user_randSalt = $row['randSalt'];
-    }
+//                 echo "<script>alert('net')</script>";
+        // $row = mysqli_fetch_array($login_query); 
+        //     $db_id = $row['user_id'];
+        //     $db_user_name = $row['user_name'];
+        //     $db_user_password = $row['user_password'];
+        //     $db_user_firstname = $row['user_firstname'];
+        //     $db_user_lastname = $row['user_lastname'];
+        //     $db_user_email = $row['user_email'];
+        //     $db_user_image = $row['user_image'];
+        //     $db_user_role = $row['user_role'];
+        //     $db_user_randSalt = $row['randSalt'];
 
 
 
-    if (password_verify($password, $db_user_password)) {
-        $_SESSION['user_id'] = $db_id;
-        $_SESSION['username'] = $db_user_name;
-        $_SESSION['firstname'] = $db_user_firstname;
-        $_SESSION['lastname'] = $db_user_lastname;
-        $_SESSION['user_role'] = $db_user_role;
+        // if (password_verify($password, $db_user_password)) {
+        //     $_SESSION['user_id'] = $db_id;
+        //     $_SESSION['username'] = $db_user_name;
+        //     $_SESSION['firstname'] = $db_user_firstname;
+        //     $_SESSION['lastname'] = $db_user_lastname;
+        //     $_SESSION['user_role'] = $db_user_role;
+            
+        //     print_r($_SESSION['username']);
+        //     if(is_logged_in()) {
+        //         echo "<script>alert('da')</script>";
 
-        if (is_admin()) {
+        //     } else {
+        //         echo "<script>alert('net')</script>";
+        //     }
 
-            redirect('cms/admin/index.php');
-        } else {
 
-            redirect('cms/index.php');
-        }
-    } else {
+            // return true;
+        // }
+    // }
+// }
 
-        redirect('cms/index.php');
-    }
-    }
-
-}
 
 
 function redirect($location)
@@ -347,5 +348,4 @@ function add_columns_to_chart(...$args)
     }
 
     print_r($element_text);
-
 }

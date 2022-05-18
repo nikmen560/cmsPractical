@@ -80,6 +80,43 @@ function update_password($user_email){
     }
 }
 
+function log_in($username, $password)
+{
+    global $conn;
+
+
+    $query = "SELECT * FROM users WHERE user_name = '$username'";
+    $login_query = mysqli_query($conn, $query);
+    if (mysqli_num_rows($login_query) <= 0) {
+        return false;
+    } else {
+
+        $row = mysqli_fetch_array($login_query); 
+            $db_id = $row['user_id'];
+            $db_user_name = $row['user_name'];
+            $db_user_password = $row['user_password'];
+            $db_user_firstname = $row['user_firstname'];
+            $db_user_lastname = $row['user_lastname'];
+            $db_user_email = $row['user_email'];
+            $db_user_image = $row['user_image'];
+            $db_user_role = $row['user_role'];
+            $db_user_randSalt = $row['randSalt'];
+
+
+
+        if (password_verify($password, $db_user_password)) {
+            $_SESSION['user_id'] = $db_id;
+            $_SESSION['username'] = $db_user_name;
+            $_SESSION['firstname'] = $db_user_firstname;
+            $_SESSION['lastname'] = $db_user_lastname;
+            $_SESSION['user_role'] = $db_user_role;
+            return true;
+        } else {
+            return false;
+        }
+    }
+}
+
 
 
 ?>

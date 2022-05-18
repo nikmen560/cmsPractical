@@ -7,7 +7,6 @@
 
 <?php  include "includes/nav.php"; ?>
 
-<?php user_loggedin_redirect('cms/index.php'); ?>
 
 <?php
 
@@ -20,15 +19,20 @@ if(is_method('post') && isset($_POST['login'])) {
 
     $user_name = escape($_POST['username']);
     $user_password = escape($_POST['password']);
-	if(empty($user_name)) {
-		$login_validation['error_message'] = 'username field is empty';
-		$login_validation['error'] = true;
-	} else if(empty($user_password)) {
-		$login_validation['error_message'] = 'password field is empty';
-		$login_validation['error'] = true;
-	} else {
-    	login_user($user_name, $user_password);
-	}
+
+    	// $log_in = login_user($user_name, $user_password);
+
+ include "includes/functions.php"; 
+		$log_in = log_in($user_name, $user_password);
+		if(!$log_in) {
+			$login_validation['error_message'] = 'username or password is not correct';
+			$login_validation['error'] = true;
+		} else if(is_logged_in() && is_admin()) {
+			redirect("cms/admin/index.php");
+		} else if(is_logged_in()){
+			
+			redirect("cms/index");
+		}
 
 } 
 
@@ -37,6 +41,7 @@ if(is_method('post') && isset($_POST['login'])) {
 
 <!-- Page Content -->
 <div class="container">
+
 
 	<div class="form-gap"></div>
 	<div class="container">
@@ -53,20 +58,20 @@ if(is_method('post') && isset($_POST['login'])) {
 								<?php $login_validation['error'] == true ? show_alert('danger', $login_validation['error_message']) : ''; ?>
 
 
-								<form id="login-form" role="form" autocomplete="off" class="form" method="post">
+								<form id="login-form" role="form" action="login.php" autocomplete="off" class="form" method="post">
 
 									<div class="form-group">
 										<div class="input-group">
 											<span class="input-group-addon"><i class="glyphicon glyphicon-user color-blue"></i></span>
 
-											<input name="username" type="text" class="form-control" placeholder="Enter Username">
+											<input name="username" required type="text" class="form-control" placeholder="Enter Username">
 										</div>
 									</div>
 
 									<div class="form-group">
 										<div class="input-group">
 											<span class="input-group-addon"><i class="glyphicon glyphicon-lock color-blue"></i></span>
-											<input name="password" type="password" class="form-control" placeholder="Enter Password">
+											<input name="password" required type="password" class="form-control" placeholder="Enter Password">
 										</div>
 									</div>
 
