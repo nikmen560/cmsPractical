@@ -234,9 +234,9 @@ function login_user($username, $password)
 
     $query = "SELECT * FROM users WHERE user_name = '$username'";
     $login_query = mysqli_query($conn, $query);
-    if (!$login_query) {
-        die('eror' . mysqli_error($conn));
-    }
+    if(mysqli_num_rows($login_query) <= 0) {
+        return false;
+    } else {
 
     while ($row = mysqli_fetch_array($login_query)) {
         $db_id = $row['user_id'];
@@ -270,6 +270,8 @@ function login_user($username, $password)
 
         redirect('cms/index.php');
     }
+    }
+
 }
 
 

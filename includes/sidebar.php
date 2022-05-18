@@ -47,7 +47,7 @@ if(isset($_SESSION['username'])) {
                 <div class="well <?= $hide_registration_form ?>">
 
                     <h4 class="text-center">Sign in</h4>
-                    <form action="../login.php" method="post">
+                    <form action="login.php" method="post">
                         <div class="form">
 
                             <div class="form-group">
