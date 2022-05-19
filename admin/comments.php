@@ -1,4 +1,3 @@
-
 <?php include "includes/header.php"; ?>
 <?php include "functions.php"; ?>
 
@@ -19,27 +18,19 @@
             <div class="row">
                 <div class="col-lg-12">
                     <h1 class="page-header">
-                        Posts manaaging
-                        <small>Author</small>
+                        Comments section
                     </h1>
-
                     <?php
-
-
-
                     if (isset($_GET['source'])) {
                         $source = $_GET['source'];
                     } else {
                         $source = '';
                     }
                     switch ($source) {
-                        case 'add_post';
+                        case 'add_comment';
                             include "includes/add_post.php";
                             break;
 
-                        case 'edit_post';
-                            include "includes/edit_post.php";
-                            break;
 
                         default:
                             include "includes/show_all_comments.php";
@@ -47,24 +38,13 @@
 
                             break;
                     }
-
-
-
-
                     ?>
-
-
-
-</div>
+                </div>
             </div>
         </div>
         <!-- /.row -->
-
     </div>
     <!-- /.container-fluid -->
-
 </div>
 <!-- /#page-wrapper -->
-
-</div>
 <?php include "includes/footer_admin.php"; ?>

@@ -18,8 +18,8 @@ if (isset($_POST['create_user'])) {
     move_uploaded_file($user_image_temp, "../images/$user_image");
 
 
-    $query = "INSERT INTO users (user_name, user_password, user_firstname, user_lastname, user_email, user_image, user_role, randSalt) 
-    VALUES('$user_name', '$user_password', '$user_firstname', '$user_lastname', '$user_email', '$user_image', '$user_role', '$randSalt')";
+    $query = "INSERT INTO users (user_name, user_password, user_firstname, user_lastname, user_email, user_image, user_role) 
+    VALUES('$user_name', '$user_password', '$user_firstname', '$user_lastname', '$user_email', '$user_image', '$user_role')";
 
     $add_user  = mysqli_query($conn, $query);
 

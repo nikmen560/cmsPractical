@@ -110,6 +110,7 @@ function log_in($username, $password)
             $_SESSION['firstname'] = $db_user_firstname;
             $_SESSION['lastname'] = $db_user_lastname;
             $_SESSION['user_role'] = $db_user_role;
+            $_SESSION['user_email'] = $db_user_email;
             return true;
         } else {
             return false;

@@ -5,7 +5,6 @@
         <tr>
             <th scope="col">User id</th>
             <th>username</th>
-            <th>user password</th>
             <th>user_firstname</th>
             <th>user_lastname</th>
             <th>user_email</th>
@@ -27,7 +26,6 @@
                 while ($row = mysqli_fetch_assoc($users)) {
                     $user_id = $row['user_id'];
                     $user_name = $row['user_name'];
-                    $user_password = $row['user_password'];
                     $user_firstname = $row['user_firstname'];
                     $user_lastname = $row['user_lastname'];
                     $user_email = $row['user_email'];
@@ -40,7 +38,6 @@
                     "<tr>
         <td>$user_id</td>
         <td>$user_name</td>
-        <td>$user_password</td>
         <td>$user_firstname</td>
         <td>$user_lastname</td>
         <td>$user_email</td>

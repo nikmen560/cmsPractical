@@ -2,7 +2,7 @@
 <?php include "functions.php" ?>
 
 <?php
-            $posts_count = count_rows_filtered('posts', 'post_user_id', get_current_username());
+            $posts_count = count_rows_filtered('posts', 'post_user_id', get_current_user_id());
             $comment_count = count_rows_filtered('comments', 'comment_user_id', get_current_user_id()); 
 $categories_count = count_rows_filtered('categories', 'category_user_id', get_current_user_id()); 
             $posts_drafted_count = count_rows_by_user('posts', 'post_user_id', 'post_status', 'draft');

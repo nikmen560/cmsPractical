@@ -35,13 +35,8 @@
             $count = mysqli_num_rows($find_count);
             $count = ceil($count / 5);
 
-            if(empty($count)) {
-                $message = 'No posts available';
-                echo "<h1 class='text-center'>$message</h1>";
-            } else {
-                $message = '';
-            }
 
+            $message = '';
 
             if(isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin' ) {
 

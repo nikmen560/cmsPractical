@@ -99,7 +99,7 @@ if (isset($_POST['liked']) || isset($_POST['unliked'])) {
                         if ($_SESSION['user_role'] === 'admin') {
                             if (isset($_GET['p_id'])) {
                                 $post_id = $_GET['p_id'];
-                                echo "<a class='btn btn-warning' href='admin/posts.php?source=edit_post&p_id=$post_id'>edit post</a>";
+                                echo "<a class='btn btn-warning' href='/cms/admin/posts.php?source=edit_post&p_id=$post_id'>edit post</a>";
                             }
                         }
                     }
@@ -121,7 +121,7 @@ if (isset($_POST['liked']) || isset($_POST['unliked'])) {
                     <p class="float-left"><span class="fa fa-eye"></span> Views: <?php echo $post_views ?></p>
                 </div>
                 <hr>
-                <img class="img-responsive" src="../images/<?php echo image_placeholder($post_image) ?>" alt="">
+                <img class="img-responsive" src="/cms/images/<?php echo image_placeholder($post_image) ?>" alt="">
                 <hr>
                 <p><?php echo $post_content ?> </p>
 
@@ -146,34 +146,33 @@ if (isset($_POST['liked']) || isset($_POST['unliked'])) {
             <!-- Blog Comments -->
 
             <?php // ADD NEW COMMENT
-            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
 
-                if (isset($_POST['submit'])) {
 
-                    $comment_author = $_POST['comment_author'];
-                    $comment_email = $_POST['comment_email'];
+                    $comment_user_id = $_SESSION['user_id'];
+                    $comment_email = $_SESSION['user_email'];
                     $comment_content = $_POST['comment_content'];
                     $post_id = $_GET['p_id'];
 
 
-                    $query = "INSERT INTO comments (comment_post_id, comment_author, comment_email, comment_content, comment_status, comment_date) VALUES ($post_id, '$comment_author', '$comment_email', '$comment_content', 'approved', now())";
+                    $query = "INSERT INTO comments (comment_post_id, comment_user_id, comment_email, comment_content, comment_status, comment_date) VALUES ($post_id, '$comment_user_id', '$comment_email', '$comment_content', 'approved', now())";
                     $add_comment = mysqli_query($conn, $query);
-                    // redirect("post.php?p_id=$post_id");
-                }
+
                 redirect("cms/post.php?p_id=$post_id");
             }
 
             ?>
             <!-- Comments Form -->
+            <?php if(isset($_SESSION['user_id'])) : ?>
             <div class="well">
                 <h4>Leave a Comment:</h4>
                 <form method="POST" action="">
-                    <div class="form-group">
-                        <input required type="text" class="form-control" name="comment_author" placeholder="enter your name">
-                    </div>
-                    <div class="form-group">
+                    <!-- <div class="form-group">
+                        <input required type="text" class="form-control" name="comment_user_id" placeholder="enter your name">
+                    </div> -->
+                    <!-- <div class="form-group">
                         <input required type="email" class="form-control" name="comment_email" placeholder="enter your email">
-                    </div>
+                    </div> -->
                     <div class="form-group">
                         <textarea required class="form-control" placeholder="enter your comment" name="comment_content" rows="3"></textarea>
                     </div>
@@ -181,7 +180,13 @@ if (isset($_POST['liked']) || isset($_POST['unliked'])) {
                 </form>
             </div>
             <hr>
+            <?php else : ?>
 
+    <div class="row">
+                <h4>To leave a comment you should <a href="/cms/login.php">sign in</a></h4>
+            </div>
+
+            <?php endif; ?>
 
 
 
@@ -193,7 +198,10 @@ if (isset($_POST['liked']) || isset($_POST['unliked'])) {
 
             $select_all_comments = mysqli_query($conn, $query);
             while ($row = mysqli_fetch_assoc($select_all_comments)) :
-                $comment_author_show = $row['comment_author'];
+                $comment_user_id = $row['comment_user_id'];
+                $author_data = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $comment_user_id"));
+                $comment_author_show = $author_data['user_name'];
+                $author_image = $author_data['user_image'];
                 $comment_email_show = $row['comment_email'];
                 $comment_content_show = $row['comment_content'];
                 $comment_date_show = $row['comment_date'];
@@ -204,7 +212,7 @@ if (isset($_POST['liked']) || isset($_POST['unliked'])) {
 
                 <div class="media">
                     <a class="pull-left" href="#">
-                        <img src="images/0x0.jpg" width="60" height="60" alt="">
+                        <img src="/cms/images/<?= $author_image ?>" width="60" height="60" alt="">
                     </a>
                     <div class="media-body">
                         <h4 class="media-heading"> <?php echo $comment_author_show ?>
