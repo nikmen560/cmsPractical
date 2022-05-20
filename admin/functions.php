@@ -208,12 +208,22 @@ function register_user($username, $email, $password)
     global $conn;
 
     $password = password_hash($password, PASSWORD_BCRYPT, array('cost' => 12));
-    $query = "INSERT INTO users (user_name, user_email, user_password, user_role) VALUES('$username', '$email', '$password', 'user')";
+    $user_image = 'avatar.webp';
+    $query = "INSERT INTO users (user_name, user_email, user_password, user_role, user_image) VALUES('$username', '$email', '$password', 'user', $user_image)";
     $register_user_query = mysqli_query($conn, $query);
 
     if (!$register_user_query) {
         die("QUERY FAILED" . mysqli_error($conn));
     }
+}
+function update_password_profile($user_id, $password) {
+
+    global $conn;
+
+    $password = password_hash($password, PASSWORD_BCRYPT, array('cost' => 12));
+    $query = "UPDATE users SET user_password = '$password' WHERE user_id = $user_id";
+    $update_query = mysqli_query($conn, $query);
+
 }
 
 

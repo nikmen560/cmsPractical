@@ -1,4 +1,4 @@
-<?php include "includes/header.php"; ?>
+   <?php include "includes/header.php"; ?>
 <?php include "functions.php"; ?>
 
 
@@ -43,7 +43,8 @@
                     }
                     if (isset($_POST['update_user'])) {
                         $user_name = $_POST['user_name'];
-                        $user_password = $_POST['user_password'];
+                        $password_to_hash = $_POST['user_password'];
+                        $user_password = password_hash($password_to_hash, PASSWORD_BCRYPT, array('cost' => 12));
                         $user_firstname = $_POST['user_firstname'];
                         $user_lastname = $_POST['user_lastname'];
                         $user_email = $_POST['user_email'];
@@ -125,4 +126,4 @@
 <!-- /#page-wrapper -->
 
 </div>
-<?php include "includes/footer_admin.php"; ?>
+<?php include "includes/footer_admin.php"; ?> 

@@ -110,7 +110,5 @@ if(isset($_SESSION['username'])) {
 
 
 
-                <!-- Side Widget Well -->
-                <?php include "includes/widget.php"; ?>
 
             </div>
