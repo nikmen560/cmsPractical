@@ -28,14 +28,7 @@ if(!isset($_SESSION['user_role'])) {
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin - Bootstrap Admin Template</title>
-
-    <!-- <link href="css/sb-admin.css" rel="stylesheet"> -->
-    <!-- Bootstrap Core CSS -->
-    <!-- <link href="css/bootstrap.min.css" rel="stylesheet"> -->
-
-
-
+    <title>CMS by KENTHD admin</title>
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
     <!-- Custom CSS -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -53,15 +46,10 @@ if(!isset($_SESSION['user_role'])) {
 
 
      <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+     <link href="../includes/summernote/summernote.min.css" rel="stylesheet">
      <!-- <link rel="stylesheet" href="../css/summernote.min.css"> -->
-    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js" defer></script> 
-    <!-- <script src="../js/summernote.min.js" defer></script> -->
-
-
-
-
-
-
+    <!-- <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js" defer></script>  -->
+    <script src="../includes/summernote/summernote.min.js" defer></script> 
 
 </head>
 

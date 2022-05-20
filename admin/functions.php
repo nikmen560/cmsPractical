@@ -237,53 +237,6 @@ function is_exists($col_name, $table_name, $row_name)
     return is_null($result) ? false : true;
 }
 
-// function login_user($username, $password)
-// {
-//     global $conn;
-
-
-//     $query = "SELECT * FROM users WHERE user_name = '$username'";
-//     $login_query = mysqli_query($conn, $query);
-//     if (mysqli_num_rows($login_query) <= 0) {
-//         // return false;
-//                 echo "<script>alert('da')</script>";
-//     } else {
-
-//                 echo "<script>alert('net')</script>";
-        // $row = mysqli_fetch_array($login_query); 
-        //     $db_id = $row['user_id'];
-        //     $db_user_name = $row['user_name'];
-        //     $db_user_password = $row['user_password'];
-        //     $db_user_firstname = $row['user_firstname'];
-        //     $db_user_lastname = $row['user_lastname'];
-        //     $db_user_email = $row['user_email'];
-        //     $db_user_image = $row['user_image'];
-        //     $db_user_role = $row['user_role'];
-        //     $db_user_randSalt = $row['randSalt'];
-
-
-
-        // if (password_verify($password, $db_user_password)) {
-        //     $_SESSION['user_id'] = $db_id;
-        //     $_SESSION['username'] = $db_user_name;
-        //     $_SESSION['firstname'] = $db_user_firstname;
-        //     $_SESSION['lastname'] = $db_user_lastname;
-        //     $_SESSION['user_role'] = $db_user_role;
-            
-        //     print_r($_SESSION['username']);
-        //     if(is_logged_in()) {
-        //         echo "<script>alert('da')</script>";
-
-        //     } else {
-        //         echo "<script>alert('net')</script>";
-        //     }
-
-
-            // return true;
-        // }
-    // }
-// }
-
 
 
 function redirect($location)
@@ -358,4 +311,69 @@ function add_columns_to_chart(...$args)
     }
 
     print_r($element_text);
+}
+
+function add_post(){
+    
+    global $conn;
+
+    if (isset($_POST['create_post'])) {
+
+        $post_title = escape($_POST['title']);
+
+        $post_user_id = escape($_POST['author']);
+        $post_category_id = escape($_POST['post_category_id']);
+        $post_status = $_POST['post_status'];
+
+        $post_image = $_FILES['image']['name'];
+        $post_image_temp = $_FILES['image']['tmp_name'];
+
+
+        $post_tags = escape($_POST['post_tags']);
+        $post_content = escape($_POST['post_content']);
+
+        $post_date = date('d-m-y');
+
+        move_uploaded_file($post_image_temp, "../images/$post_image");
+
+
+        $query = "INSERT INTO posts (post_category_id, post_user_id, post_title, post_date, post_image,post_content,post_tags,post_status) 
+    VALUES($post_category_id, $post_user_id, '$post_title',  now(), '$post_image', '$post_content', '$post_tags',  '$post_status')";
+
+        // TODO: ESCAPE EVERY SQL QUERY
+        // TODO: USE ONLY USER_ID OF IN DB not 3 fields.
+
+        $add_post = mysqli_query($conn, $query);
+
+        $post_id = mysqli_insert_id($conn);
+
+        if (!$add_post) {
+            die("poized " . mysqli_error($conn));
+        } else {
+            echo "<p class='bg-success'>Post created <a href='../post.php?p_id=$post_id'> View Post</a></p>";
+        }
+    }
+}
+
+function show_categories() {
+    global $conn;
+
+            $query = "SELECT * FROM categories";
+            $categories = mysqli_query($conn, $query);
+            while ($row = mysqli_fetch_assoc($categories)) {
+                $cat_id = $row['cat_id'];
+                $cat_title = $row['cat_title'];
+                echo "<option value='$cat_id'>$cat_title</option>";
+            }
+}
+function show_users() {
+    global $conn;
+
+            $query = "SELECT * FROM users";
+            $users = mysqli_query($conn, $query);
+            while ($row = mysqli_fetch_assoc($users)) {
+                $user_id = $row['user_id'];
+                $user_name = $row['user_name'];
+                echo "<option value='$user_id'>$user_name</option>";
+            }
 }
