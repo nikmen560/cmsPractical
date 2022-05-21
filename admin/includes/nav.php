@@ -7,7 +7,9 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="index.php">CMS admin</a>
+        <a class="navbar-brand" href="index.php"> <?php if(is_admin()) echo "CMS admin"; else echo "User Dashboard"?> </a>
+
+            
     </div>
     <!-- Top Menu Items -->
     <ul class="nav navbar-right top-nav">
