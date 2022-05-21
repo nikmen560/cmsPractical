@@ -17,7 +17,7 @@
             <a href="#">Users Online: <span class="usersonline"></span></a>
         </li>
         <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> <?php echo $_SESSION['firstname'] . ' ' . $_SESSION['lastname']; ?><b class="caret"></b></a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> <?= $_SESSION['username'] ?><b class="caret"></b></a>
             <ul class="dropdown-menu">
                 <li>
                     <a href="profile.php"><i class="fa fa-fw fa-user"></i> Profile</a>
@@ -30,14 +30,9 @@
             </ul>
         </li>
         <li>
-            <a href="/cms">home</a>
+            <a href="/cms">Home page</a>
         </li>
     </ul>
-
-
-
-
-    <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
     <div class="collapse navbar-collapse navbar-ex1-collapse">
         <ul class="nav navbar-nav side-nav">
             <li>
@@ -52,13 +47,14 @@
                 <a href="javascript:;" data-toggle="collapse" data-target="#post_dropdown"><i class="fa fa-fw fa-arrows-v"></i> Posts <i class="fa fa-fw fa-caret-down"></i></a>
                 <ul id="post_dropdown" class="collapse">
                     <li>
-                        <a href="posts.php">View all posts</a>
+                        <a href="posts.php"><?php if(is_admin()) echo "View all posts"; else echo "View my posts"; ?></a>
                     </li>
                     <li>
-                        <a href="posts.php?source=add_post">Add posts</a>
+                        <a href="posts.php?source=add_post">Add post</a>
                     </li>
                 </ul>
             </li>
+            <?php if(is_admin()): ?>
             <li>
                 <a href="categories.php"><i class="fa fa-fw fa-wrench"></i>Categories</a>
             </li>
@@ -73,6 +69,7 @@
                     </li>
                 </ul>
             </li>
+            <?php endif; ?>
             <li class="">
                 <a href="comments.php"><i class="fa fa-fw fa-file"></i>Comments</a>
             </li>
