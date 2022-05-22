@@ -1,82 +1,57 @@
-<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-    <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="index.php"> <?php if(is_admin()) echo "CMS admin"; else echo "User Dashboard"?> </a>
 
-            
-    </div>
-    <!-- Top Menu Items -->
-    <ul class="nav navbar-right top-nav">
-        <li>
-            <a href="#">Users Online: <span class="usersonline"></span></a>
-        </li>
-        <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> <?= $_SESSION['username'] ?><b class="caret"></b></a>
-            <ul class="dropdown-menu">
-                <li>
-                    <a href="profile.php"><i class="fa fa-fw fa-user"></i> Profile</a>
-                </li>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="index.php"> <?php if (is_admin()) echo "CMS admin";
+                                                else echo "User Dashboard" ?>  </a>
+<small style="color: white;">Users Online: <span class="usersonline"></span></small>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
 
-                <li class="divider"></li>
-                <li>
-                    <a href="includes/logout.php"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
-                </li>
-            </ul>
-        </li>
-        <li>
-            <a href="/cms">Home page</a>
-        </li>
-    </ul>
-    <div class="collapse navbar-collapse navbar-ex1-collapse">
-        <ul class="nav navbar-nav side-nav">
-            <li>
-                <a href="index.php"><i class="fa fa-fw fa-dashboard"></i>My data</a>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="index.php">My data</a>
             </li>
-            <?php if(is_admin()): ?>
-            <li>
-                <a href="dashboard.php"><i class="fa fa-fw fa-dashboard"></i>Dashboard</a>
+        <li class="nav-item">
+        </li>
+        <?php if(is_admin()): ?>
+                <li class="nav-item">
+                    <a class="nav-link" href="dashboard.php"></i> Dashboard</a>
+                </li>
+                <?php endif; ?>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa fa-fw fa-user"> </i>
+                   <?php echo $_SESSION['username']; ?> 
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="profile.php">Profile</a>
+                    <a class="dropdown-item" href="posts.php">My posts</a> 
+                    <a class="dropdown-item" href="comments.php">My comments</a> 
+
+                    <!-- TODO: CREATE MY POSTS PAGE -->
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="includes/logout.php">Log out</a>
+                </div>
+            </li>
+        <?php if(is_admin()): ?>
+            <li class="nav-item">
+                <a class="nav-link disabled" href="categories.php">Categories</a>
+            </li>
+
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Users
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="users.php?source=add_user">Add user</a>
+                    <a class="dropdown-item" href="users.php">All users</a> 
+                </div>
             </li>
             <?php endif; ?>
-            <li>
-                <a href="javascript:;" data-toggle="collapse" data-target="#post_dropdown"><i class="fa fa-fw fa-arrows-v"></i> Posts <i class="fa fa-fw fa-caret-down"></i></a>
-                <ul id="post_dropdown" class="collapse">
-                    <li>
-                        <a href="posts.php"><?php if(is_admin()) echo "View all posts"; else echo "View my posts"; ?></a>
-                    </li>
-                    <li>
-                        <a href="posts.php?source=add_post">Add post</a>
-                    </li>
-                </ul>
-            </li>
-            <?php if(is_admin()): ?>
-            <li>
-                <a href="categories.php"><i class="fa fa-fw fa-wrench"></i>Categories</a>
-            </li>
-            <li>
-                <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-arrows-v"></i>Users<i class="fa fa-fw fa-caret-down"></i></a>
-                <ul id="demo" class="collapse">
-                    <li>
-                        <a href="./users.php">View users</a>
-                    </li>
-                    <li>
-                        <a href="users.php?source=add_user">Add user</a>
-                    </li>
-                </ul>
-            </li>
-            <?php endif; ?>
-            <li class="">
-                <a href="comments.php"><i class="fa fa-fw fa-file"></i>Comments</a>
-            </li>
-            <li>
-                <a href="profile.php"><i class="fa fa-fw fa-dashboard"></i>Profile</a>
+            <li class="nav-item">
+                <a class="nav-link" href="/cms">Home page</a>
             </li>
         </ul>
     </div>
-    <!-- /.navbar-collapse -->
 </nav>
