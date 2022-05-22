@@ -10,6 +10,15 @@ function image_placeholder($image)
     }
 }
 
+function user_image_placeholder($image) {
+
+    if (!$image) {
+        return 'avatar.webp';
+    } else {
+        return $image;
+    }
+}
+
 function is_user_logged_in()
 {
     global $conn;

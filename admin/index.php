@@ -106,9 +106,26 @@ $categories_count = count_rows_filtered('categories', 'category_user_id', get_cu
                 </div>
             </div>
 
+            <div id="columnchart_material" style="width: 'auto'; height: 500px;"></div>
+
+
+
+
+        </div>
+        <!-- /.container-fluid -->
+
+    </div>
+    <!-- /#page-wrapper -->
+
+</div>
+<!-- /#wrapper -->
+
+<?php include "includes/footer_admin.php"; ?>
+
 
             <script type="text/javascript">
 
+            $(document).ready(function() {
                 google.charts.load('current', {
                     'packages': ['bar']
                 });
@@ -139,18 +156,5 @@ $categories_count = count_rows_filtered('categories', 'category_user_id', get_cu
 
                     chart.draw(data, google.charts.Bar.convertOptions(options));
                 }
+            })
             </script>
-
-            <div id="columnchart_material" style="width: 'auto'; height: 500px;"></div>
-
-
-        </div>
-        <!-- /.container-fluid -->
-
-    </div>
-    <!-- /#page-wrapper -->
-
-</div>
-<!-- /#wrapper -->
-
-<?php include "includes/footer_admin.php"; ?>

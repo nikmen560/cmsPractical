@@ -17,9 +17,9 @@
             <!-- Page Heading -->
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">
-                        Posts manaaging
-                        <small>Author</small>
+
+                    <h1 class="page-header text-center">
+                        My posts
                     </h1>
 
                     <?php
@@ -39,10 +39,6 @@
 
                         case 'edit_post';
                             include "includes/edit_post.php";
-                            break;
-
-                        case '34';
-                            echo "nice";
                             break;
 
                         default:

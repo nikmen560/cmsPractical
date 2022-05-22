@@ -57,27 +57,28 @@ function delete_category()
 function show_all_posts()
 {
     global $conn;
-    $query = "SELECT posts.post_id, posts.post_author, posts.post_content, posts.post_title, posts.post_category_id, posts.post_status, posts.post_image, posts.post_tags, posts.post_comment_count, posts.post_date, posts.post_views_count, categories.cat_id, categories.cat_title FROM posts LEFT JOIN categories ON posts.post_category_id = categories.cat_id ORDER BY posts.post_id DESC";
-    $posts = mysqli_query($conn, $query);
-    while ($row = mysqli_fetch_assoc($posts)) {
-        $post_id = $row['post_id'];
-        $post_category_id = $row['post_category_id'];
-        $post_title = $row['post_title'];
-        $post_author = $row['post_author'];
-        $post_date = $row['post_date'];
-        $post_image = $row['post_image'];
-        $post_content = $row['post_content'];
-        $post_content = mb_strimwidth($post_content, 0, 150);
-        $post_tags = $row['post_tags'];
-        $post_comment_count = $row['post_comment_count'];
-        $post_status = $row['post_status'];
-        $post_views = $row['post_views_count'];
-        $cat_id = $row['cat_id'];
-        $cat_title = $row['cat_title'];
-        $count_post_comments = mysqli_num_rows(mysqli_query($conn, "SELECT * FROM comments WHERE comment_post_id = $post_id"));
+    $query = "SELECT posts.post_id, posts.post_user_id, posts.post_content, posts.post_title, posts.post_category_id, posts.post_status, posts.post_image, posts.post_tags, posts.post_comment_count, posts.post_date, posts.post_views_count, categories.cat_id, categories.cat_title FROM posts LEFT JOIN categories ON posts.post_category_id = categories.cat_id ORDER BY posts.post_id DESC";
+    $result = mysqli_query($conn, $query);
+    if ($result) {
+        while ($row = mysqli_fetch_assoc($result)) {
+            $post_id = $row['post_id'];
+            $post_category_id = $row['post_category_id'];
+            $post_title = $row['post_title'];
+            $post_author = $row['post_user_id'];
+            $post_date = $row['post_date'];
+            $post_image = $row['post_image'];
+            $post_content = $row['post_content'];
+            $post_content = mb_strimwidth($post_content, 0, 130);
+            $post_tags = $row['post_tags'];
+            $post_comment_count = $row['post_comment_count'];
+            $post_status = $row['post_status'];
+            $post_views = $row['post_views_count'];
+            $cat_id = $row['cat_id'];
+            $cat_title = $row['cat_title'];
+            $count_post_comments = mysqli_num_rows(mysqli_query($conn, "SELECT * FROM comments WHERE comment_post_id = $post_id"));
 
-        echo
-        "<tr>
+            echo
+            "<tr>
             <td><input type='checkbox' class='checkBoxes' name='checkBoxArray[]' value='$post_id' id=''></td>
         <td>$post_id</td>
         <td>$post_author</td>
@@ -88,19 +89,22 @@ function show_all_posts()
 
         <td>$post_content</td>
         <td>$post_status</td>
-        <td><img class='img-responsive' src='../images/$post_image'></td>
+        <td><img style='width: 100px' class='img-responsive' src='../images/$post_image'></td>
         <td>$post_tags</td>" .
-            "<td>" .
-            "<a href='post_comments.php?id=$post_id'>" .
-            $count_post_comments .
-            "</a>" .
-            "</td>" .
-            "<td>$post_date</td>
+                "<td>" .
+                "<a href='post_comments.php?id=$post_id'>" .
+                $count_post_comments .
+                "</a>" .
+                "</td>" .
+                "<td>$post_date</td>
         <td>$post_views</td>
         <td><a href='../post.php?p_id=$post_id'>View post</a></td>
         <td><a onClick=\"javascript: return confirm('are you really want to delete'); \" href='posts.php?delete=$post_id'>Delete</a></td>
         <td><a href='posts.php?source=edit_post&p_id=$post_id'>Edit</a></td>
         </tr>";
+        }
+    } else {
+        echo mysqli_error($conn);
     }
 }
 
@@ -216,14 +220,14 @@ function register_user($username, $email, $password)
         die("QUERY FAILED" . mysqli_error($conn));
     }
 }
-function update_password_profile($user_id, $password) {
+function update_password_profile($user_id, $password)
+{
 
     global $conn;
 
     $password = password_hash($password, PASSWORD_BCRYPT, array('cost' => 12));
     $query = "UPDATE users SET user_password = '$password' WHERE user_id = $user_id";
     $update_query = mysqli_query($conn, $query);
-
 }
 
 
@@ -313,8 +317,9 @@ function add_columns_to_chart(...$args)
     print_r($element_text);
 }
 
-function add_post(){
-    
+function add_post()
+{
+
     global $conn;
 
     if (isset($_POST['create_post'])) {
@@ -355,25 +360,35 @@ function add_post(){
     }
 }
 
-function show_categories() {
+function show_categories()
+{
     global $conn;
 
-            $query = "SELECT * FROM categories";
-            $categories = mysqli_query($conn, $query);
-            while ($row = mysqli_fetch_assoc($categories)) {
-                $cat_id = $row['cat_id'];
-                $cat_title = $row['cat_title'];
-                echo "<option value='$cat_id'>$cat_title</option>";
-            }
+    $query = "SELECT * FROM categories";
+    $categories = mysqli_query($conn, $query);
+    while ($row = mysqli_fetch_assoc($categories)) {
+        $cat_id = $row['cat_id'];
+        $cat_title = $row['cat_title'];
+        echo "<option value='$cat_id'>$cat_title</option>";
+    }
 }
-function show_users() {
+function show_users()
+{
     global $conn;
 
-            $query = "SELECT * FROM users";
-            $users = mysqli_query($conn, $query);
-            while ($row = mysqli_fetch_assoc($users)) {
-                $user_id = $row['user_id'];
-                $user_name = $row['user_name'];
-                echo "<option value='$user_id'>$user_name</option>";
-            }
+    $query = "SELECT * FROM users";
+    $users = mysqli_query($conn, $query);
+    while ($row = mysqli_fetch_assoc($users)) {
+        $user_id = $row['user_id'];
+        $user_name = $row['user_name'];
+        echo "<option value='$user_id'>$user_name</option>";
+    }
+}
+
+function get_user()
+{
+    global $conn;
+    $user_id = $_SESSION['user_id'];
+
+    return mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $user_id"));
 }
