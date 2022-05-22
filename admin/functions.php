@@ -393,9 +393,32 @@ function get_user()
     return mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $user_id"));
 }
 
-function change_post_bulk() {
+function change_post_bulk_query($query, $post_id, $type_of_data, $bulk_options = null, ...$params)
+{
+    global $conn;
+    if ($stmt = mysqli_prepare($conn, $query)) {
+        if (!is_null($bulk_options)) {
+            mysqli_stmt_bind_param($stmt, $type_of_data, $bulk_options, $post_id);
+        } else if(!empty($params)) {
+            mysqli_stmt_bind_param($stmt, $type_of_data, ...$params);
 
-    global $conn; 
+        } else {
+            mysqli_stmt_bind_param($stmt, $type_of_data, $post_id);
+        }
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+        redirect('cms/admin/posts.php');
+    } else {
+        echo mysqli_error($conn);
+    }
+}
+
+// TODO:DELETE AND VIEWS COUNT DOESNOT WORK
+
+function change_post_bulk()
+{
+
+    global $conn;
 
     $bulk_options = $_POST['post_status'];
 
@@ -406,56 +429,53 @@ function change_post_bulk() {
 
         switch ($bulk_options) {
             case 'published';
-                $query = "UPDATE posts SET post_status = '$bulk_options' WHERE post_id = $el";
-                $update = mysqli_query($conn, $query);
-                header('location: posts.php');
+                $query = "UPDATE posts SET post_status = ? WHERE post_id = ?";
+                change_post_bulk_query($query, $el, 'si', $bulk_options);
                 break;
             case 'draft';
-                $query = "UPDATE posts SET post_status = '$bulk_options' WHERE post_id = $el";
-                $update = mysqli_query($conn, $query);
-                header('location: posts.php');
+                $query = "UPDATE posts SET post_status = ? WHERE post_id = ?";
+                change_post_bulk_query($query,  $el, 'si', $bulk_options);
                 break;
             case 'delete';
-                $query = "DELETE FROM posts WHERE post_id = $el";
-                $update = mysqli_query($conn, $query);
-                header('location: posts.php');
+                $query = "DELETE FROM posts WHERE post_id = ?";
+                change_post_bulk_query($query, $el, 'i');
                 break;
             case 'reset_views';
-                $query = "UPDATE posts SET post_views_count = 0 WHERE post_id = $el";
-                $update = mysqli_query($conn, $query);
-                header('location: posts.php');
+                $query = "UPDATE posts SET post_views_count = 0 WHERE post_id = ?";
+                change_post_bulk_query($query, $el, 'i');
                 break;
             case 'clone';
-
                 $query = "SELECT * FROM posts WHERE post_id = $el";
-$posts = mysqli_query($conn, $query);
-                if(!$posts) {
+                $posts = mysqli_query($conn, $query);
+                if (!$posts) {
                     echo mysqli_error($conn);
-
                 }
+                $row = mysqli_fetch_assoc($posts);
+                $post_category_id = $row['post_category_id'];
+                $post_title = $row['post_title'];
+                $post_user_id = $row['post_user_id'];
+                $post_date = $row['post_date'];
+                $post_image = $row['post_image'];
+                $post_content = $row['post_content'];
+                $post_tags = $row['post_tags'];
+                $post_status = $row['post_status'];
+                $date = date("Y-m-d");
 
-                while ($row = mysqli_fetch_assoc($posts)) {
-                    $post_category_id = $row['post_category_id'];
-                    $post_title = $row['post_title'];
-                    $post_user_id = $row['post_user_id'];
-                    $post_date = $row['post_date'];
-                    $post_image = $row['post_image'];
-                    $post_content = $row['post_content'];
-                    $post_tags = $row['post_tags'];
-                    $post_status = $row['post_status'];
-                }
                 $query = "INSERT INTO posts (post_category_id, post_title, post_user_id, post_date, post_image, post_content,post_tags,post_status) 
-    VALUES($post_category_id, '$post_title', $post_user_id, now(), '$post_image', '$post_content', '$post_tags', '$post_status')";
+    VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
 
-                $clone_post = mysqli_query($conn, $query);
-                if ($clone_post) {
-                    echo "EXECUTED";
-                    // header('location: posts.php');
-                } else {
-                    mysqli_error($conn);
-                }
+                change_post_bulk_query($query,'', 'isisssss', null, $post_category_id, $post_title, $post_user_id, $date, $post_image, $post_content, $post_tags, $post_status );
+
+                // if ($stmt = mysqli_prepare($conn, $query)) {
+
+                //     mysqli_stmt_bind_param($stmt, 'isisssss', $post_category_id, $post_title, $post_user_id, $date, $post_image, $post_content, $post_tags, $post_status);
+                //     mysqli_stmt_execute($stmt);
+                //     mysqli_stmt_close($stmt);
+                //     redirect('cms/admin/posts.php');
+                // } else {
+                //     echo mysqli_error($conn);
+                // }
                 break;
         }
     }
-
 }
