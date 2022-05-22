@@ -392,3 +392,70 @@ function get_user()
 
     return mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $user_id"));
 }
+
+function change_post_bulk() {
+
+    global $conn; 
+
+    $bulk_options = $_POST['post_status'];
+
+    $checkBoxArr = $_POST['checkBoxArray'];
+
+    foreach ($checkBoxArr as $el) {
+
+
+        switch ($bulk_options) {
+            case 'published';
+                $query = "UPDATE posts SET post_status = '$bulk_options' WHERE post_id = $el";
+                $update = mysqli_query($conn, $query);
+                header('location: posts.php');
+                break;
+            case 'draft';
+                $query = "UPDATE posts SET post_status = '$bulk_options' WHERE post_id = $el";
+                $update = mysqli_query($conn, $query);
+                header('location: posts.php');
+                break;
+            case 'delete';
+                $query = "DELETE FROM posts WHERE post_id = $el";
+                $update = mysqli_query($conn, $query);
+                header('location: posts.php');
+                break;
+            case 'reset_views';
+                $query = "UPDATE posts SET post_views_count = 0 WHERE post_id = $el";
+                $update = mysqli_query($conn, $query);
+                header('location: posts.php');
+                break;
+            case 'clone';
+
+                $query = "SELECT * FROM posts WHERE post_id = $el";
+$posts = mysqli_query($conn, $query);
+                if(!$posts) {
+                    echo mysqli_error($conn);
+
+                }
+
+                while ($row = mysqli_fetch_assoc($posts)) {
+                    $post_category_id = $row['post_category_id'];
+                    $post_title = $row['post_title'];
+                    $post_user_id = $row['post_user_id'];
+                    $post_date = $row['post_date'];
+                    $post_image = $row['post_image'];
+                    $post_content = $row['post_content'];
+                    $post_tags = $row['post_tags'];
+                    $post_status = $row['post_status'];
+                }
+                $query = "INSERT INTO posts (post_category_id, post_title, post_user_id, post_date, post_image, post_content,post_tags,post_status) 
+    VALUES($post_category_id, '$post_title', $post_user_id, now(), '$post_image', '$post_content', '$post_tags', '$post_status')";
+
+                $clone_post = mysqli_query($conn, $query);
+                if ($clone_post) {
+                    echo "EXECUTED";
+                    // header('location: posts.php');
+                } else {
+                    mysqli_error($conn);
+                }
+                break;
+        }
+    }
+
+}
