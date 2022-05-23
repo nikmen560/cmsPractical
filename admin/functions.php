@@ -68,7 +68,7 @@ function show_all_posts()
             $post_date = $row['post_date'];
             $post_image = $row['post_image'];
             $post_content = $row['post_content'];
-            $post_content = mb_strimwidth($post_content, 0, 130);
+            $post_content = mb_strimwidth($post_content, 0, 60);
             $post_tags = $row['post_tags'];
             $post_comment_count = $row['post_comment_count'];
             $post_status = $row['post_status'];
@@ -478,4 +478,16 @@ function change_post_bulk()
                 break;
         }
     }
+}
+
+function get_post_by_p_id() {
+        global $conn;
+        $post_id = $_GET['p_id'];
+        $query = "SELECT * FROM posts WHERE post_id = $post_id";
+        if($posts = mysqli_query($conn, $query)) {
+        return mysqli_fetch_assoc($posts);
+        } else {
+            die(mysqli_error($conn));
+        }
+
 }

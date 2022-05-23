@@ -52,4 +52,3 @@ if (is_admin()) {
         });
     });
 </script>
-<?php include "includes/footer_admin.php"; ?>
