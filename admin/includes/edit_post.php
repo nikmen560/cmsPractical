@@ -1,24 +1,26 @@
 <?php
+include "/cms/includes/alert.php";
 if (is_logged_in()) {
-
-
     if (isset($_GET['p_id'])) {
         $post_data = get_post_by_p_id();
     }
-
     if (isset($_POST['update_post'])) {
         if (update_post()) {
-
-            echo "<p class='bg-success'>Post Updated<a href='../post.php?p_id=$post_id'> View Post</a></p>";
+            $is_updated = true;
+            $post_id = $post_data['post_id'];
         } else {
+            $is_updated = true;
 
-            echo "<p class='bg-danger'>Post is not updated";
         }
     }
 }
 ?>
 
 <form action="" method="post" enctype="multipart/form-data">
+    <?php if(isset($is_updated) && $is_updated = true) : show_alert('success', "The post is updated <a href='../post.php?p_id=$post_id'>view post</a>"); ?>
+    <?php elseif (isset($is_updated) && $is_updated = false) : show_alert('danger', "The post is not updated, something went wrong"); ?>
+    <?php endif; ?>
+
     <div class="form-group">
         <input value="<?php echo $post_data['post_title'] ?>" type="text" name="title" class="form-control" placeholder="post title">
     </div>
@@ -30,24 +32,19 @@ if (is_logged_in()) {
     <div class="form-group">
         <select name="post_user_id" id="">
         <?php
-            $post_author_id = $post_data['user_id'];
+            $post_author_id = $post_data['post_user_id'];
             $author_post_name = get_post_user_by_user_id($post_author_id);
             if (isset($author_post_name) && !empty($author_post_name)) {
                 echo "<option value='$post_author_id'>$author_post_name</option>";
             }
-
-            while ($users = get_users()) :
+            get_users_options();
         ?>
-                <option value="<?= $users['user_id'] ?>"><?= $users['user_name'] ?></option>;
-            <?php endwhile; ?>
         </select>
     </div>
 
     <div class="form-group">
         <select name="post_status" id="post_status">
-
             <option value="<?php echo $post_data['post_status'] ?>"><?php echo  $post_data['post_status'] ?></option>
-
             <?php
             if ($post_status === 'published') {
                 echo "<option value='draft'>draft</option>";
@@ -73,5 +70,4 @@ if (is_logged_in()) {
     <div class="form-group">
         <input type="submit" class="btn btn-primary" name="update_post" value="update post">
     </div>
-
 </form>

@@ -518,7 +518,7 @@ function update_post()
 
     if ($stmt = mysqli_prepare($conn, $query)) {
 
-        mysqli_stmt_bind_param($stmt, 'sisisssi', $post_title, $post_category_id, $post_date, $post_user_id, $post_status, $post_tags, $post_content, $post_image, $post_id);
+        mysqli_stmt_bind_param($stmt, 'sisissssi', $post_title, $post_category_id, $post_date, $post_user_id, $post_status, $post_tags, $post_content, $post_image, $post_id);
         mysqli_stmt_execute($stmt);
 
         return true;
@@ -540,11 +540,15 @@ function get_post_user_by_user_id($post_author_id)
     }
 }
 
-function get_users()
+function get_users_options()
 {
     global $conn;
 
-    $query_users= "SELECT * FROM users";
+    $query_users= "SELECT user_name, user_id FROM users";
     $users= mysqli_query($conn, $query_users);
-    return mysqli_fetch_assoc($users);
+    while($row = mysqli_fetch_assoc($users)) {
+        $user_id = $row['user_id'];
+        $user_name = $row['user_name'];
+                echo "<option value='$user_id'>$user_name</option>";
+    }
 }
