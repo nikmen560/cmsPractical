@@ -399,9 +399,8 @@ function change_post_bulk_query($query, $post_id, $type_of_data, $bulk_options =
     if ($stmt = mysqli_prepare($conn, $query)) {
         if (!is_null($bulk_options)) {
             mysqli_stmt_bind_param($stmt, $type_of_data, $bulk_options, $post_id);
-        } else if(!empty($params)) {
+        } else if (!empty($params)) {
             mysqli_stmt_bind_param($stmt, $type_of_data, ...$params);
-
         } else {
             mysqli_stmt_bind_param($stmt, $type_of_data, $post_id);
         }
@@ -464,7 +463,7 @@ function change_post_bulk()
                 $query = "INSERT INTO posts (post_category_id, post_title, post_user_id, post_date, post_image, post_content,post_tags,post_status) 
     VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
 
-                change_post_bulk_query($query,'', 'isisssss', null, $post_category_id, $post_title, $post_user_id, $date, $post_image, $post_content, $post_tags, $post_status );
+                change_post_bulk_query($query, '', 'isisssss', null, $post_category_id, $post_title, $post_user_id, $date, $post_image, $post_content, $post_tags, $post_status);
 
                 // if ($stmt = mysqli_prepare($conn, $query)) {
 
@@ -480,14 +479,72 @@ function change_post_bulk()
     }
 }
 
-function get_post_by_p_id() {
-        global $conn;
-        $post_id = $_GET['p_id'];
-        $query = "SELECT * FROM posts WHERE post_id = $post_id";
-        if($posts = mysqli_query($conn, $query)) {
+function get_post_by_p_id()
+{
+    global $conn;
+    $post_id = $_GET['p_id'];
+    $query = "SELECT * FROM posts WHERE post_id = $post_id";
+    if ($posts = mysqli_query($conn, $query)) {
         return mysqli_fetch_assoc($posts);
-        } else {
-            die(mysqli_error($conn));
-        }
+    } else {
+        die(mysqli_error($conn));
+    }
+}
 
+function update_post()
+{
+
+    global $conn;
+
+    $post_id = $_GET['p_id'];
+    $post_title = $_POST['title'];
+    $post_user_id = $_POST['post_user_id'];
+    $post_category_id = $_POST['post_category_id'];
+    $post_status = $_POST['post_status'];
+    $post_date = date('d:m:y');
+    $post_image = $_FILES['image']['name'];
+    $post_image_temp = $_FILES['image']['tmp_name'];
+    $post_tags = $_POST['post_tags'];
+    $post_content = $_POST['post_content'];
+    move_uploaded_file($post_image_temp, "../images/$post_image");
+
+    if (empty($post_image)) {
+        $query = "SELECT * FROM posts WHERE post_id =$post_id ";
+        $select_image = mysqli_query($conn, $query);
+        $row = mysqli_fetch_assoc($select_image);
+        $post_image = $row['post_image'];
+    }
+    $query = "UPDATE posts SET post_title = ?, post_category_id = ?, post_date = ?, post_user_id= ?, post_status = ?, post_tags = ?, post_content = ?, post_image = ? WHERE post_id = ?";
+
+    if ($stmt = mysqli_prepare($conn, $query)) {
+
+        mysqli_stmt_bind_param($stmt, 'sisisssi', $post_title, $post_category_id, $post_date, $post_user_id, $post_status, $post_tags, $post_content, $post_image, $post_id);
+        mysqli_stmt_execute($stmt);
+
+        return true;
+    } else {
+        return false;
+    }
+}
+
+
+function get_post_user_by_user_id($post_author_id)
+{
+    global $conn;
+    $author_post_name_query = "SELECT user_name FROM users WHERE user_id = $post_author_id";
+    if ($execute = mysqli_query($conn, $author_post_name_query)) {
+
+        return mysqli_fetch_assoc($execute)['user_name'];
+    } else {
+        die(mysqli_error($conn));
+    }
+}
+
+function get_users()
+{
+    global $conn;
+
+    $query_users= "SELECT * FROM users";
+    $users= mysqli_query($conn, $query_users);
+    return mysqli_fetch_assoc($users);
 }
