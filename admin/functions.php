@@ -213,7 +213,7 @@ function register_user($username, $email, $password)
 
     $password = password_hash($password, PASSWORD_BCRYPT, array('cost' => 12));
     $user_image = 'avatar.webp';
-    $query = "INSERT INTO users (user_name, user_email, user_password, user_role, user_image) VALUES('$username', '$email', '$password', 'user', $user_image)";
+    $query = "INSERT INTO users (user_name, user_email, user_password, user_role, user_image) VALUES('$username', '$email', '$password', 'user', '$user_image')";
     $register_user_query = mysqli_query($conn, $query);
 
     if (!$register_user_query) {
