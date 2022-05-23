@@ -1,7 +1,7 @@
 <form action="" method="post">
     <div class="table-responsive{-md}">
         <table class="table table-responsive-md table-bordered table-hover">
-            <div id="bulkOptionsContainer" class="col-xs-4 form-group">
+            <div id="bulkOptionsContainer" class="col-xs-4 form-group mt-3">
                 <select class="form-control" name="post_status" id="bulkOptionsSelect">
                     <option value="published">Published</option>
                     <option value="draft">draft</option>
