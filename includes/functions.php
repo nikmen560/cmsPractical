@@ -10,7 +10,8 @@ function image_placeholder($image)
     }
 }
 
-function user_image_placeholder($image) {
+function user_image_placeholder($image)
+{
 
     if (!$image) {
         return 'avatar.webp';
@@ -71,7 +72,8 @@ function is_equal_tokens_then_return_user()
     }
     return ['username' => $username, 'user_email' => $user_email];
 }
-function update_password($user_email){
+function update_password($user_email)
+{
     global $conn;
 
     $new_password = $_POST['password'];
@@ -100,16 +102,16 @@ function log_in($username, $password)
         return false;
     } else {
 
-        $row = mysqli_fetch_array($login_query); 
-            $db_id = $row['user_id'];
-            $db_user_name = $row['user_name'];
-            $db_user_password = $row['user_password'];
-            $db_user_firstname = $row['user_firstname'];
-            $db_user_lastname = $row['user_lastname'];
-            $db_user_email = $row['user_email'];
-            $db_user_image = $row['user_image'];
-            $db_user_role = $row['user_role'];
-            $db_user_randSalt = $row['randSalt'];
+        $row = mysqli_fetch_array($login_query);
+        $db_id = $row['user_id'];
+        $db_user_name = $row['user_name'];
+        $db_user_password = $row['user_password'];
+        $db_user_firstname = $row['user_firstname'];
+        $db_user_lastname = $row['user_lastname'];
+        $db_user_email = $row['user_email'];
+        $db_user_image = $row['user_image'];
+        $db_user_role = $row['user_role'];
+        $db_user_randSalt = $row['randSalt'];
 
 
 
@@ -127,6 +129,101 @@ function log_in($username, $password)
     }
 }
 
+
+function get_post_user_by_id($user_id)
+{
+    global $conn;
+
+    $query = "SELECT * FROM users WHERE user_id = $user_id";
+    return mysqli_fetch_assoc(mysqli_query($conn, $query));
+}
+
+function update_post_views()
+{
+    global $conn;
+    $post_id = $_GET['p_id'];
+
+    $view_query = "UPDATE posts SET post_views_count = post_views_count + 1 WHERE post_id = ?";
+    if ($stmt = mysqli_prepare($conn, $view_query)) {
+
+        mysqli_stmt_bind_param($stmt, 'i', $post_id);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+    }
+}
+
+function get_post_by_get()
+{
+    global $conn;
+
+    $post_id = $_GET['p_id'];
+    $query = "SELECT * FROM posts WHERE post_id = $post_id";
+    $execute = mysqli_query($conn, $query);
+    return mysqli_fetch_assoc($execute);
+}
+
+function add_new_comment()
+{
+    global $conn;
+    $comment_user_id = $_SESSION['user_id'];
+    $post_id = $_GET['p_id'];
+    $comment_content = $_POST['comment_content'];
+    $comment_date = date('Y-m-d');
+    $query = "INSERT INTO comments (comment_post_id, comment_user_id, comment_content, comment_status, comment_date) VALUES (?, ?, ?, 'approved', ?)";
+    if ($stmt = mysqli_prepare($conn, $query)) {
+        mysqli_stmt_bind_param($stmt, 'iiss', $post_id, $comment_user_id, $comment_content, $comment_date);
+        mysqli_stmt_execute($stmt);
+
+        redirect("cms/post.php?p_id=$post_id");
+    } else {
+        echo mysqli_error($conn);
+    }
+}
+
+function is_liked_by_user($post_id, $user_id)
+{
+
+    global $conn;
+    $is_user_liked = mysqli_query($conn, "SELECT * FROM likes WHERE post_id = $post_id AND user_id=$user_id");
+    if (mysqli_num_rows($is_user_liked) >= 1) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function like_unlike_post()
+{
+    global $conn;
+
+    $post_id = $_POST['post_id'];
+    $select_query = "SELECT * FROM posts WHERE post_id = $post_id";
+    $select_post = mysqli_query($conn, $select_query);
+    $post_arr = mysqli_fetch_assoc($select_post);
+    $user_id = $_POST['user_id'];
+
+    $post_likes = $post_arr['post_likes'];
+
+    if (is_liked_by_user($post_id, $user_id)) { //make a disslike
+
+        mysqli_query($conn, "UPDATE posts SET post_likes = $post_likes-1 WHERE post_id=$post_id");
+        mysqli_query($conn, "DELETE FROM likes  WHERE user_id = $user_id AND post_id=$post_id");
+        return false;
+    } else {
+
+        mysqli_query($conn, "UPDATE posts SET post_likes = $post_likes+1 WHERE post_id=$post_id");
+        mysqli_query($conn, "INSERT INTO likes (user_id, post_id) VALUES($user_id, $post_id)");
+        return true;
+    }
+}
+
+function get_user_by_id($user_id)
+{
+    global $conn;
+    $query = mysqli_query($conn, "SELECT * FROM users WHERE user_id = $user_id");
+    $arr = mysqli_fetch_array($query);
+    return $arr;
+}
 
 
 ?>
