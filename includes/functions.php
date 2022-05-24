@@ -224,6 +224,14 @@ function get_user_by_id($user_id)
     $arr = mysqli_fetch_array($query);
     return $arr;
 }
+            function page_counter()
+            {
+                global $conn;
+                $post_query_count = "SELECT * FROM posts WHERE post_status = 'published'";
+                $find_count = mysqli_query($conn, $post_query_count);
+                $count = mysqli_num_rows($find_count);
+                return $count = ceil($count / 5);
+            }
 
 
 ?>
