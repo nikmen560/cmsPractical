@@ -1,24 +1,9 @@
 <?php include "includes/header.php"; ?>
 <?php include "includes/nav.php"; ?>
 <?php include "includes/functions.php"; ?>
-
-<!-- Page Content -->
-<div class="container">
-
-    <div class="row">
-
-        <!-- Blog Entries Column -->
-        <div class="col-md-8">
-
-
-
-            <?php
-
-
+<?php 
             $count = page_counter();
-
             $per_page = 5;
-
             if (isset($_GET['page'])) {
                 $page = $_GET['page'];
             } else {
@@ -29,16 +14,17 @@
             } else {
                 $page_1 = ($page * $per_page) - $per_page;
             }
+?>
 
-
-
+<!-- Page Content -->
+<div class="container">
+    <div class="row">
+        <!-- Blog Entries Column -->
+        <div class="col-md-8">
+            <?php
             $posts = select_all_posts_paged($page_1, $per_page);
-
-            // while ($row = mysqli_fetch_assoc($select_all_posts_query)): 
-
                 foreach($posts as $post) :
                 $user_data = get_post_user_by_id($post['post_user_id']);
-
             ?>
                 <h1 class="page-header">
                     <a href="post/<?php echo $post['post_id']; ?>"><?php echo $post['post_title'] ?></a>

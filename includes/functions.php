@@ -232,16 +232,14 @@ function page_counter()
     $count = mysqli_num_rows($find_count);
     return $count = ceil($count / 5);
 }
-function get_all_posts_by_author($user_id)
+function get_all_posts_by_author($user_id, $page_1, $per_page)
 {
     global $conn;
-
     if (is_logged_in() && is_admin()) {
-        $query = "SELECT * FROM posts WHERE post_user_id = $user_id";
+        $query = "SELECT * FROM posts WHERE post_user_id = $user_id LIMIT $page_1, $per_page";
     } else {
-        $query = "SELECT * FROM posts WHERE post_user_id = $user_id AND post_status = 'published'";
+        $query = "SELECT * FROM posts WHERE post_user_id = $user_id AND post_status = 'published' LIMIT $page_1, $per_page";
     }
-
     $select_all_posts_query = mysqli_query($conn, $query);
     return mysqli_fetch_all($select_all_posts_query, MYSQLI_ASSOC);
 }
@@ -249,10 +247,8 @@ function select_all_posts_paged($page_1, $per_page)
 {
     global $conn;
     if (is_logged_in() && is_admin()) {
-
         $query = "SELECT * FROM posts LIMIT $page_1, $per_page";
     } else {
-
         $query = "SELECT * FROM posts WHERE post_status = 'published' LIMIT $page_1, $per_page";
     }
     $select_all_posts_query = mysqli_query($conn, $query);
