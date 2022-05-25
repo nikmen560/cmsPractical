@@ -245,6 +245,19 @@ function get_all_posts_by_author($user_id)
     $select_all_posts_query = mysqli_query($conn, $query);
     return mysqli_fetch_all($select_all_posts_query, MYSQLI_ASSOC);
 }
+function select_all_posts_paged($page_1, $per_page)
+{
+    global $conn;
+    if (is_logged_in() && is_admin()) {
+
+        $query = "SELECT * FROM posts LIMIT $page_1, $per_page";
+    } else {
+
+        $query = "SELECT * FROM posts WHERE post_status = 'published' LIMIT $page_1, $per_page";
+    }
+    $select_all_posts_query = mysqli_query($conn, $query);
+    return mysqli_fetch_all($select_all_posts_query, MYSQLI_ASSOC);
+}
 
 
 ?>
