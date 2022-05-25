@@ -224,14 +224,27 @@ function get_user_by_id($user_id)
     $arr = mysqli_fetch_array($query);
     return $arr;
 }
-            function page_counter()
-            {
-                global $conn;
-                $post_query_count = "SELECT * FROM posts WHERE post_status = 'published'";
-                $find_count = mysqli_query($conn, $post_query_count);
-                $count = mysqli_num_rows($find_count);
-                return $count = ceil($count / 5);
-            }
+function page_counter()
+{
+    global $conn;
+    $post_query_count = "SELECT * FROM posts WHERE post_status = 'published'";
+    $find_count = mysqli_query($conn, $post_query_count);
+    $count = mysqli_num_rows($find_count);
+    return $count = ceil($count / 5);
+}
+function get_all_posts_by_author($user_id)
+{
+    global $conn;
+
+    if (is_logged_in() && is_admin()) {
+        $query = "SELECT * FROM posts WHERE post_user_id = $user_id";
+    } else {
+        $query = "SELECT * FROM posts WHERE post_user_id = $user_id AND post_status = 'published'";
+    }
+
+    $select_all_posts_query = mysqli_query($conn, $query);
+    return mysqli_fetch_all($select_all_posts_query, MYSQLI_ASSOC);
+}
 
 
 ?>
