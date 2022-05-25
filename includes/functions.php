@@ -232,6 +232,19 @@ function page_counter()
     $count = mysqli_num_rows($find_count);
     return $count = ceil($count / 5);
 }
+function page_counter_filtered($post_status, $category_id = null)
+{
+    global $conn;
+    if(is_null($category_id)){ 
+    $post_query_count = "SELECT * FROM posts WHERE post_status = '$post_status'";
+    } else {
+
+    $post_query_count = "SELECT * FROM posts WHERE post_status = '$post_status' AND post_category_id = '$category_id'";
+    }
+    $find_count = mysqli_query($conn, $post_query_count);
+    $count = mysqli_num_rows($find_count);
+    return $count = ceil($count / 5);
+}
 function get_all_posts_by_author($user_id, $page_1, $per_page)
 {
     global $conn;
@@ -250,6 +263,18 @@ function select_all_posts_paged($page_1, $per_page)
         $query = "SELECT * FROM posts LIMIT $page_1, $per_page";
     } else {
         $query = "SELECT * FROM posts WHERE post_status = 'published' LIMIT $page_1, $per_page";
+    }
+    $select_all_posts_query = mysqli_query($conn, $query);
+    return mysqli_fetch_all($select_all_posts_query, MYSQLI_ASSOC);
+}
+function get_all_posts_by_category($page_1, $per_page)
+{
+    global $conn;
+    $cat_id = $_GET['category_id'];
+    if (is_logged_in() && is_admin()) {
+        $query = "SELECT * FROM posts WHERE post_category_id = $cat_id LIMIT $page_1, $per_page";
+    } else {
+        $query = "SELECT * FROM posts WHERE post_category_id = $cat_id AND post_status = 'published' LIMIT $page_1, $per_page";
     }
     $select_all_posts_query = mysqli_query($conn, $query);
     return mysqli_fetch_all($select_all_posts_query, MYSQLI_ASSOC);
