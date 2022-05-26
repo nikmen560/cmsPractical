@@ -1,11 +1,11 @@
-<?php  include "includes/header.php"; ?>
+<?php include "includes/header.php"; ?>
 <?php include_once "includes/alert.php"; ?>
 
 
 
 <!-- Navigation -->
 
-<?php  include "includes/nav.php"; ?>
+<?php include "includes/nav.php"; ?>
 
 
 <?php
@@ -13,28 +13,21 @@
 //TODO: login popup create
 $login_validation = [
 	'error_message' => '',
-	'error' => false  
+	'error' => false
 ];
-if(is_method('post') && isset($_POST['login'])) {
+if (is_method('post') && isset($_POST['login'])) {
+	$user_name = escape($_POST['username']);
+	$user_password = escape($_POST['password']);
+	include "includes/functions.php";
+	$log_in = log_in($user_name, $user_password);
+	if (!$log_in) {
+		$login_validation['error_message'] = 'username or password is not correct';
+		$login_validation['error'] = true;
+	} else {
 
-    $user_name = escape($_POST['username']);
-    $user_password = escape($_POST['password']);
-
-    	// $log_in = login_user($user_name, $user_password);
-
- include "includes/functions.php"; 
-		$log_in = log_in($user_name, $user_password);
-		if(!$log_in) {
-			$login_validation['error_message'] = 'username or password is not correct';
-			$login_validation['error'] = true;
-		} else if(is_logged_in() && is_admin()) {
-			redirect("cms/admin/index.php");
-		} else if(is_logged_in()){
-			
-			redirect("cms/index");
-		}
-
-} 
+		redirect("cms/admin/profile.php");
+	}
+}
 
 
 ?>
@@ -94,6 +87,6 @@ if(is_method('post') && isset($_POST['login'])) {
 
 	<hr>
 
-	<?php include "includes/footer.php";?>
+	<?php include "includes/footer.php"; ?>
 
 </div> <!-- /.container -->
