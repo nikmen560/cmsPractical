@@ -115,11 +115,14 @@ function delete_post()
 
     global $conn;
 
-    if (isset($_GET['delete'])) {
         $post_id = $_GET['delete'];
-        $query = "DELETE FROM posts WHERE post_id = $post_id";
-        $delete_post = mysqli_query($conn, $query);
-        header("Location:posts.php");
+        $user_id = $_GET['u_id'];
+    if(is_admin() || ($_SESSION['user_id'] == $user_id)) {
+        $query = "DELETE FROM posts WHERE post_id = ?";
+        $stmt = mysqli_prepare($conn, $query);
+        mysqli_stmt_bind_param($stmt, 'i', $post_id);
+        mysqli_stmt_execute($stmt);
+        redirect("cms/admin/posts.php?u_id={$_SESSION['user_id']}");
     }
 }
 
@@ -544,61 +547,61 @@ function get_users_options()
 {
     global $conn;
 
-    $query_users = "SELECT user_name, user_id FROM users";
-    $users = mysqli_query($conn, $query_users);
-    while ($row = mysqli_fetch_assoc($users)) {
+    $query_users= "SELECT user_name, user_id FROM users";
+    $users= mysqli_query($conn, $query_users);
+    while($row = mysqli_fetch_assoc($users)) {
         $user_id = $row['user_id'];
         $user_name = $row['user_name'];
-        echo "<option value='$user_id'>$user_name</option>";
+                echo "<option value='$user_id'>$user_name</option>";
     }
 }
 
-function update_user_image()
-{
-    global $conn;
-    $user_image = $_FILES['image']['name'];
-    $user_image_tmp = $_FILES['image']['tmp_name'];
-    move_uploaded_file($user_image_tmp, "../images/$user_image");
-    if (empty($user_image)) {
-        $query = "SELECT user_image FROM users WHERE user_id = {$_SESSION['user_id']}";
-        $select_image = mysqli_query($conn, $query);
-        $row = mysqli_fetch_assoc($select_image);
-        $user_image = $row['user_image'];
-    }
-    if ($stmt = mysqli_prepare($conn, "UPDATE users SET user_image = ? WHERE user_id = {$_SESSION['user_id']}")) {
+            function update_user_image()
+            {
+                global $conn;
+                $user_image = $_FILES['image']['name'];
+                $user_image_tmp = $_FILES['image']['tmp_name'];
+                move_uploaded_file($user_image_tmp, "../images/$user_image");
+                if (empty($user_image)) {
+                    $query = "SELECT user_image FROM users WHERE user_id = {$_SESSION['user_id']}";
+                    $select_image = mysqli_query($conn, $query);
+                    $row = mysqli_fetch_assoc($select_image);
+                    $user_image = $row['user_image'];
+                }
+                if($stmt = mysqli_prepare($conn, "UPDATE users SET user_image = ? WHERE user_id = {$_SESSION['user_id']}")) {
 
-        mysqli_stmt_bind_param($stmt, 's', $user_image);
-        mysqli_stmt_execute($stmt);
-        return true;
-    } else {
+                mysqli_stmt_bind_param($stmt, 's', $user_image);
+                mysqli_stmt_execute($stmt);
+                return true;
+                } else {
+                    
+                    mysqli_error($conn);
+                    return false;
+                }
+            }
+                                function update_user()
+                                {
+                                    global $conn;
 
-        mysqli_error($conn);
-        return false;
-    }
-}
-function update_user()
-{
-    global $conn;
+                                    $user_firstname = $_POST['user_firstname'];
+                                    $user_lastname = $_POST['user_lastname'];
+                                    $user_email = $_POST['user_email'];
 
-    $user_firstname = $_POST['user_firstname'];
-    $user_lastname = $_POST['user_lastname'];
-    $user_email = $_POST['user_email'];
+                                    if (!empty($_POST['user_password'])) {
+                                        $password_to_hash = $_POST['user_password'];
+                                        $user_password = password_hash($password_to_hash, PASSWORD_BCRYPT, array('cost' => 12));
 
-    if (!empty($_POST['user_password'])) {
-        $password_to_hash = $_POST['user_password'];
-        $user_password = password_hash($password_to_hash, PASSWORD_BCRYPT, array('cost' => 12));
-
-        $query = "UPDATE users SET  user_firstname = ?, user_lastname= ?, user_password = ? user_email = ? WHERE user_id = {$_SESSION['user_id']}";
-        $stmt = mysqli_prepare($conn, $query);
-        mysqli_stmt_bind_param($stmt, 'ssss',  $user_firstname, $user_lastname, $user_password, $user_email);
-    } else {
-        $query = "UPDATE users SET  user_firstname = ?, user_lastname= ?, user_email = ? WHERE user_id = {$_SESSION['user_id']}";
-        $stmt = mysqli_prepare($conn, $query);
-        mysqli_stmt_bind_param($stmt, 'sss',  $user_firstname, $user_lastname,  $user_email);
-    }
-    if (mysqli_stmt_execute($stmt)) {
-        return true;
-    } else {
-        return false;
-    }
-}
+                                        $query = "UPDATE users SET  user_firstname = ?, user_lastname= ?, user_password = ? user_email = ? WHERE user_id = {$_SESSION['user_id']}";
+                                        $stmt = mysqli_prepare($conn, $query);
+                                        mysqli_stmt_bind_param($stmt, 'ssss',  $user_firstname, $user_lastname, $user_password, $user_email);
+                                    } else {
+                                        $query = "UPDATE users SET  user_firstname = ?, user_lastname= ?, user_email = ? WHERE user_id = {$_SESSION['user_id']}";
+                                        $stmt = mysqli_prepare($conn, $query);
+                                        mysqli_stmt_bind_param($stmt, 'sss',  $user_firstname, $user_lastname,  $user_email);
+                                    }
+                                    if (mysqli_stmt_execute($stmt)) {
+                                        return true;
+                                    } else {
+                                        return false;
+                                    }
+                                }

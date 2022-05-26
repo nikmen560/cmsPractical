@@ -1,51 +1,52 @@
-<form action="" method="post">
-    <div class="table-responsive{-md}">
-        <table class="table table-responsive-md table-bordered table-hover">
-            <div id="bulkOptionsContainer" class="col-xs-4 form-group mt-3">
-                <select class="form-control" name="post_status" id="bulkOptionsSelect">
-                    <option value="published">Published</option>
-                    <option value="draft">draft</option>
-                    <option value="delete">delete</option>
-                    <option value="clone">clone</option>
-                    <option value="reset_views">reset views</option>
-                </select>
-            </div>
-            <div class="col-xs-4 form-group">
-                <input type="submit" name="submit" class="btn btn-success form-group" value="apply">
-                <a href="posts.php?source=add_post" class="btn btn-primary form-group">Add New</a>
-            </div>
-            <thead>
-                <tr>
-                    <th><input type="checkbox" name="" id="selectAllBoxes"></th>
-                    <th>Id</th>
-                    <th>Author</th>
-                    <th>Title</th>
-                    <th>Category</th>
-                    <th>Content</th>
-                    <th>Status</th>
-                    <th>Image</th>
-                    <th>Tags</th>
-                    <th>Comments count</th>
-                    <th>Date</th>
-                    <th>views</th>
-                    <th>view Post</th>
-                    <th>Delete</th>
-                    <th>Edit</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <!-- show all posts-->
-                    <?php show_all_posts(); ?>
-                    <!-- delete post -->
-                    <?php delete_post(); ?>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</form>
+                    <?php
+    if (isset($_GET['delete'])) {
+        delete_post();
+    }
+                    function get_all_posts($user_id = null)
+                    {
+                        global $conn;
+                        if (is_null($user_id)) {
+                            $query = "SELECT * FROM posts";
+                        } else {
+                            $query = "SELECT * FROM posts WHERE post_user_id = $user_id";
+                        }
+                        $result = mysqli_query($conn, $query);
+                        return mysqli_fetch_all($result, MYSQLI_ASSOC);
+                    }
+                    if (isset($_GET['u_id'])) {
+                        $user_id = $_GET['u_id'];
+                        $posts = get_all_posts($user_id);
+                    } else {
+                        if (!is_admin()) {
+                            redirect('cms/admin/index.php');
+                        }
+                        $posts = get_all_posts();
+                    }
+                    ?>
+                    <div class="card-deck">
+                        <?php foreach ($posts as $post) : ?>
+                            <div class="card">
+                                <img class="card-img-top" src="/cms/images/<?= $post['post_image'] ?>" alt="image <?= $post['post_title'] ?>">
+                                <div class="card-body">
+                                    <h5 class="card-title"><?= $post['post_title'] ?></h5>
+                                    <p class="card-text"><?= substr($post['post_content'], 0, 100) ?></p>
+                                    <!-- TODO : CARDS INSTEAD OF TABLE -->
+                                </div>
+                                <div class="card-footer">
+                                    <div class="row justify-content-around">
+                                    <p class="card-text"><small class="text-muted">Comments: <?= $post['post_comment_count'] ?></small></p>
+                                    <p class="card-text"><small class="text-muted">Views: <?= $post['post_views_count'] ?></small></p>
+                                    <p class="card-text"><small class="text-muted">Likes: <?= $post['post_likes'] ?></small></p>
+                                    </div>
+                                    <div class="btn-group btn-group-sm">
+                                        <a href="/cms/post/<?= $post['post_id'] ?>" class="btn btn-info">View</a>
+                                        <a href="/cms/admin/posts.php?source=edit_post&p_id=<?= $post['post_id'] ?>" class="btn btn-secondary">Edit</a>
+                                        <a href="/cms/admin/posts.php?u_id=<?=$user_id?>&delete=<?=$post['post_id']?>" class="btn btn-danger">Delete</a>
+                                    </div>
+                                </div>
 
-<?php isset($_POST['checkBoxArray']) ? change_post_bulk() : null; ?>
-
-
-<script src="../js/script.js"></script>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                    <?php isset($_POST['checkBoxArray']) ? change_post_bulk() : null; ?>
+                    <script src="../js/script.js"></script>
