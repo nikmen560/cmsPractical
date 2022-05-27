@@ -1,87 +1,52 @@
-<? include "../functions.php"; ?>
+<?php
+$user_id = $_GET['u_id'];
+$comments = get_comments();
 
-<table class="table table-bordered table-hover">
-    <thead>
-        <tr>
-            <th>Id</th>
-            <th>Post id</th>
-            <th>Author</th>
-            <th>email</th>
-            <th>Content</th>
-            <th>Status</th>
-            <th>Date</th>
-            <th>Delete</th>
-            <th>Unapprove</th>
-            <th>Approve</th>
-
-
-
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <!-- show all posts-->
-
-            <?php
-
-            $query = "SELECT * FROM comments ORDER BY comment_id DESC";
-            $comments = mysqli_query($conn, $query);
-            while ($row = mysqli_fetch_assoc($comments)) :
-                $comment_id = $row['comment_id'];
-                $comment_post_id = $row['comment_post_id'];
-                $comment_user_id = $row['comment_user_id'];
-                $comment_author_query = mysqli_query($conn, "SELECT user_name FROM users WHERE user_id = $comment_user_id");
-                $comment_author_arr = mysqli_fetch_assoc($comment_author_query);
-                $comment_author = $comment_author_arr['user_name'];
-                $comment_email = $row['comment_email'];
-                $comment_content = $row['comment_content'];
-                $comment_status = $row['comment_status'];
-                $comment_date = $row['comment_date'];
-                $selected_post_query = mysqli_query($conn, "SELECT post_id, post_title FROM posts WHERE post_id=$comment_post_id");
-                $post_row = mysqli_fetch_assoc($selected_post_query); 
-                    $post_id = $post_row['post_id'];
-                    $post_title = $post_row['post_title'];
-            ?>
-
-                    <tr>
-
-        <td><?= $comment_id ?></td>
-        <td><a href="../post.php?p_id=<?= $post_id ?>"><?= $post_title ?></a></td>
-        <td><?= $comment_author ?></td>
-        <td><?= $comment_email ?></td>
-        <td><?= $comment_content ?></td>
-        <td><?= $comment_status ?></td>
-        <td><?= $comment_date ?></td>
-        <td><a href="comments.php?delete=<?= $comment_id ?>">Delete</a></td>
-        <td><a href="comments.php?unapprove=<?= $comment_id ?>">Unapprove</a></td>
-        <td><a href="comments.php?approve=<?= $comment_id ?>">approve</a></td>
-        
-        </tr>
-        <?php endwhile; ?>
-            <!-- delete post -->
-            <?php delete_comment(); ?>
-
-            <?php 
-
-    if (isset($_GET['approve'])) {
-        $comment_id = $_GET['approve'];
-        $query = "UPDATE comments SET comment_status = 'approved' WHERE comment_id = $comment_id";
-        $unapprove_query= mysqli_query($conn, $query);
-        header("location:comments.php");
-    }
-
-    if (isset($_GET['unapprove'])) {
-        $comment_id = $_GET['unapprove'];
-        $query = "UPDATE comments SET comment_status = 'unapproved' WHERE comment_id = $comment_id";
-        $unapprove_query= mysqli_query($conn, $query);
-        header("location:comments.php");
-    }
-
-
+if (isset($_GET['delete']) && (is_admin() || $_GET['u_id'] === $_SESSION['user_id'])) { // delete comment
+    delete_comment();
+}
+if (isset($_GET['approve'])) {
+    $comment_id = $_GET['approve'];
+    change_comment_status($comment_id,'approved');
+}
+if (isset($_GET['unapprove'])) {
+    $comment_id = $_GET['unapprove'];
+    change_comment_status($comment_id,'unapproved');
+}
 ?>
-
-
-
-        </tr>
-    </tbody>
-</table>
+<div class="row d-flex justify-content-center mt-100 mb-100">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-body text-center">
+                <h4 class="card-title">My comments</h4>
+            </div>
+            <div class="comment-widgets">
+                <?php
+                foreach ($comments as $comment) :
+                    $post = get_post_by_post_id($comment['comment_post_id']);
+                ?>
+                    <div class="card d-flex flex-row comment-row p-3">
+                        <a href="/cms/post/<?= $post['post_id'] ?>">
+                            <div class="p-2"><img src="/cms/images/<?= $post['post_image'] ?>" alt="user" width="50" class="rounded-circle"></div>
+                        </a>
+                        <div class="comment-text w-100">
+                            <a href="/cms/post/<?= $post['post_id'] ?>">
+                                <h6 class="font-medium"><?= $post['post_title'] ?></h6>
+                            </a>
+                            <span class="text-muted float-right"><?= $comment['comment_status'] ?></span>
+                            <span class="m-b-15 d-block"><?= $comment['comment_content'] ?></span>
+                            <div class="comment-footer"> 
+                                <span class="text-muted float-right"><?= $comment['comment_date'] ?></span>
+                                <a href="/cms/admin/comments.php?u_id=<?= $user_id ?>&delete=<?= $comment['comment_id'] ?>"></a>
+                                <?php if(is_admin() && $comment['comment_status'] == 'unapproved'): ?>
+                                    <a class="btn btn-success btn-sm" href="/cms/admin/comments.php?u_id=<?= $user_id ?>&approve=<?= $comment['comment_id'] ?>">Publish</a>
+                                <?php elseif(is_admin() && $comment['comment_status'] == 'approved'): ?>
+                                    <a class="btn btn-info btn-sm" href="/cms/admin/comments.php?u_id=<?= $user_id ?>&unapprove=<?= $comment['comment_id'] ?>">Unapprove</a>
+                                <?php endif; ?>
+                                <?php if(is_admin() || $_GET['u_id'] == $_SESSION['user_id']): ?>
+                                    <a class="btn btn-danger btn-sm" href="/cms/admin/comments.php?u_id=<?= $user_id ?>&delete=<?= $comment['comment_id'] ?>">Delete</a>
+                                    <?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>

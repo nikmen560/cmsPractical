@@ -611,3 +611,38 @@ function get_users_options()
                                         return false;
                                     }
                                 }
+function get_comments()
+{
+    global $conn;
+    $user_id = $_GET['u_id'];
+    if (is_admin()) {
+        $query = "SELECT * FROM comments ORDER BY comment_id DESC";
+    } else {
+
+        $query = "SELECT * FROM comments WHERE comment_user_id = $user_id  ORDER BY comment_id DESC";
+    }
+    $query = mysqli_query($conn, $query);
+    return mysqli_fetch_all($query, MYSQLI_ASSOC);
+}
+
+function get_post_by_post_id($comment_post_id)
+{
+
+    global $conn;
+
+    $query = "SELECT * FROM posts WHERE post_id = $comment_post_id";
+    $execute = mysqli_query($conn, $query);
+    return mysqli_fetch_assoc($execute);
+}
+
+
+function change_comment_status($comment_id, $action) {
+    global $conn;
+    $query = "UPDATE comments SET comment_status = ? WHERE comment_id = ?";
+    $stmt = mysqli_prepare($conn, $query);
+    mysqli_stmt_bind_param($stmt, 'si', $action, $comment_id);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+    redirect("cms/admin/comments.php?u_id={$_GET['u_id']}");
+
+}
