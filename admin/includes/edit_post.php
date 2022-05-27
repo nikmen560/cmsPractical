@@ -29,6 +29,7 @@ if (is_logged_in()) {
             <?php show_categories(); ?>
         </select>
     </div>
+    <?php if(is_admin()): ?>
     <div class="form-group">
         <select name="post_user_id" id="">
         <?php
@@ -52,9 +53,9 @@ if (is_logged_in()) {
                 echo "<option value='published'>published</option>";
             }
             ?>
-
         </select>
     </div>
+    <?php endif; ?>
     <div class="form-group">
         <img width="100" src="../images/<?php echo $post_data['post_image'] ?>" alt="">
         <input type="file" name="image">

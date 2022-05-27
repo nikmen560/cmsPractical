@@ -130,12 +130,12 @@ function delete_comment()
 {
 
     global $conn;
-    if (isset($_GET['delete'])) {
         $delete_comment_id = $_GET['delete'];
-        $query = "DELETE FROM comments WHERE comment_id = $delete_comment_id";
-        $delete_query = mysqli_query($conn, $query);
-        header("location:comments.php");
-    }
+        $query = "DELETE FROM comments WHERE comment_id = ?";
+        $stmt = mysqli_prepare($conn, $query);
+        mysqli_stmt_bind_param($stmt, 'i', $delete_comment_id);
+        mysqli_stmt_execute($stmt);
+    redirect("cms/admin/comments.php?u_id={$_GET['u_id']}");
 }
 
 function show_rows_count($tableQuery)
@@ -501,9 +501,7 @@ function update_post()
 
     $post_id = $_GET['p_id'];
     $post_title = $_POST['title'];
-    $post_user_id = $_POST['post_user_id'];
     $post_category_id = $_POST['post_category_id'];
-    $post_status = $_POST['post_status'];
     $post_date = date('d:m:y');
     $post_image = $_FILES['image']['name'];
     $post_image_temp = $_FILES['image']['tmp_name'];
@@ -517,11 +515,19 @@ function update_post()
         $row = mysqli_fetch_assoc($select_image);
         $post_image = $row['post_image'];
     }
+    if(is_admin()) {
+    $post_status = $_POST['post_status'];
+    $post_user_id = $_POST['post_user_id'];
     $query = "UPDATE posts SET post_title = ?, post_category_id = ?, post_date = ?, post_user_id= ?, post_status = ?, post_tags = ?, post_content = ?, post_image = ? WHERE post_id = ?";
-
+    $types = 'sisissssi';
+    $args = [$post_title, $post_category_id, $post_date, $post_user_id, $post_status, $post_tags, $post_content, $post_image, $post_id];
+    } else {
+    $query = "UPDATE posts SET post_title = ?, post_category_id = ?, post_date = ?,  post_tags = ?, post_content = ?, post_image = ? WHERE post_id = ?";
+    $types = 'sissssi';
+    $args = [$post_title, $post_category_id, $post_date, $post_tags, $post_content, $post_image, $post_id];
+    }
     if ($stmt = mysqli_prepare($conn, $query)) {
-
-        mysqli_stmt_bind_param($stmt, 'sisissssi', $post_title, $post_category_id, $post_date, $post_user_id, $post_status, $post_tags, $post_content, $post_image, $post_id);
+        mysqli_stmt_bind_param($stmt, $types, ...$args);
         mysqli_stmt_execute($stmt);
 
         return true;
