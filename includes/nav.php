@@ -41,31 +41,16 @@
                     } else if($page_name == 'login.php') {
                         $login_class == 'active';
                     }
-
                     echo "<li class='$category_class'><a  href='/cms/category/$cat_id'>{$cat_title}</a></li>";
                 }
-                
                 ?>
-
                 <?php if(!is_logged_in()): ?>
-
                     <li class='$registration_class float-left'><a href='/cms/registration'>Sign Up</a></li>
                     <li class='$login_class float-left'><a href='/cms/login.php'>Log In</a></li>
                 <?php else: ?>  
-
                     <li><a href='/cms/admin/includes/logout.php'>logout</a></li>
-
-                    <?php endif; ?>
-
-
-                    <?php if(is_logged_in() && is_admin()): ?>
-
                     <li><a href='/cms/admin/index.php'>Admin</a></li>
-
                     <?php endif; ?>
-
-
-                   
             </ul>
         </div>
         <!-- /.navbar-collapse -->

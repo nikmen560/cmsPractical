@@ -9,9 +9,11 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
+            <?php if(!is_admin()):  ?>
             <li class="nav-item">
                 <a class="nav-link" href="index.php">My data</a>
             </li>
+            <?php endif; ?>
         <li class="nav-item">
         </li>
         <?php if(is_admin()): ?>
@@ -26,8 +28,8 @@
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="profile.php">Profile</a>
-                    <a class="dropdown-item" href="posts.php">My posts</a> 
-                    <a class="dropdown-item" href="comments.php">My comments</a> 
+                    <a class="dropdown-item" href="posts.php?u_id=<?php echo get_current_user_id()?>">My posts</a> 
+                    <a class="dropdown-item" href="comments.php?u_id=<?php echo get_current_user_id() ?>">My comments</a> 
 
                     <!-- TODO: CREATE MY POSTS PAGE -->
                     <div class="dropdown-divider"></div>
@@ -36,9 +38,17 @@
             </li>
         <?php if(is_admin()): ?>
             <li class="nav-item">
-                <a class="nav-link disabled" href="categories.php">Categories</a>
+                <a class="nav-link" href="categories.php">Categories</a>
             </li>
-
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                   Posts 
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="posts.php?source=add_user">Add post</a>
+                    <a class="dropdown-item" href="posts.php">All posts</a> 
+                </div>
+            </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Users
