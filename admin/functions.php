@@ -668,20 +668,21 @@ function unset_admin()
     redirect("cms/admin/users.php");
 }
 
-            function show_all_users() {
-                global $conn;
-                $query = "SELECT * FROM users ORDER BY user_id DESC";
-                $users = mysqli_query($conn, $query);
-                while ($row = mysqli_fetch_assoc($users)) {
-                    $user_id = $row['user_id'];
-                    $user_name = $row['user_name'];
-                    $user_firstname = $row['user_firstname'];
-                    $user_lastname = $row['user_lastname'];
-                    $user_email = $row['user_email'];
-                    $user_image = $row['user_image'];
-                    $user_role = $row['user_role'];
-                    echo
-                    "<tr>
+function show_all_users()
+{
+    global $conn;
+    $query = "SELECT * FROM users ORDER BY user_id DESC";
+    $users = mysqli_query($conn, $query);
+    while ($row = mysqli_fetch_assoc($users)) {
+        $user_id = $row['user_id'];
+        $user_name = $row['user_name'];
+        $user_firstname = $row['user_firstname'];
+        $user_lastname = $row['user_lastname'];
+        $user_email = $row['user_email'];
+        $user_image = $row['user_image'];
+        $user_role = $row['user_role'];
+        echo
+        "<tr>
                         <td>$user_id</td>
                         <td>$user_name</td>
                         <td>$user_firstname</td>
@@ -697,6 +698,33 @@ function unset_admin()
                         <td><a class='btn btn-info' href='users.php?set_admin=$user_id'>set admin</a></td>
                         <td><a class='btn btn-success' href='users.php?unset_admin=$user_id'>set user</a></td>
                         </tr>";
+    }
+}
 
-            }
-        }
+
+function add_user()
+{
+    global $conn;
+
+    $user_name = $_POST['user_name'];
+    $user_password = password_hash($_POST['user_password'], PASSWORD_BCRYPT, array('cost' => 12));
+    $user_firstname = $_POST['user_firstname'];
+    $user_lastname = $_POST['user_lastname'];
+    $user_email = $_POST['user_email'];
+    $user_image = $_FILES['image']['name'];
+    $user_image_temp = $_FILES['image']['tmp_name'];
+    $user_role = $_POST['user_role'];
+    move_uploaded_file($user_image_temp, "../images/$user_image");
+
+    $query = "INSERT INTO users (user_name, user_password, user_firstname, user_lastname, user_email, user_image, user_role) 
+    VALUES(?, ?, ?, ?, ?, ?, ?)";
+    if ($stmt = mysqli_prepare($conn, $query)) {
+        mysqli_stmt_bind_param($stmt, 'sssssss', $user_name, $user_password, $user_firstname, $user_lastname, $user_email, $user_image, $user_role);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+    return true;
+    } else {
+        return false;
+
+    }
+}
