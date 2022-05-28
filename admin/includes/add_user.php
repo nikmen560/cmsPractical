@@ -65,6 +65,4 @@ if (isset($_POST['create_user'])) {
     <div class="form-group">
         <input type="submit" class="btn btn-primary" name="create_user" value="create">
     </div>
-
 </form>
-<?php include "includes/footer_admin.php"; ?>

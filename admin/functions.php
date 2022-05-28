@@ -12,15 +12,11 @@ function confirm_query($result)
 
 function insert_category()
 {
-
     global $conn;
-    if (isset($_POST['submit'])) {
-        $new_category_name = $_POST['cat_title'];
-
-        $stmt = mysqli_prepare($conn, "INSERT INTO categories (cat_title)  VALUES (?)");
-        mysqli_stmt_bind_param($stmt, 's', $new_category_name);
-        mysqli_stmt_execute($stmt);
-    }
+    $new_category_name = $_POST['cat_title'];
+    $stmt = mysqli_prepare($conn, "INSERT INTO categories (cat_title)  VALUES (?)");
+    mysqli_stmt_bind_param($stmt, 's', $new_category_name);
+    mysqli_stmt_execute($stmt);
 }
 
 function find_all_categories()
@@ -47,12 +43,10 @@ function delete_category()
 
     global $conn;
 
-    if (isset($_GET['delete'])) {
-        $cat_id_delete = $_GET['delete'];
-        $query = "DELETE FROM categories WHERE cat_id = $cat_id_delete";
-        $delete_cat_query = mysqli_query($conn, $query);
-        header("Location:categories.php");
-    }
+    $cat_id_delete = $_GET['delete'];
+    $query = "DELETE FROM categories WHERE cat_id = $cat_id_delete";
+    $delete_cat_query = mysqli_query($conn, $query);
+    header("Location:categories.php");
 }
 function show_all_posts()
 {
@@ -115,9 +109,9 @@ function delete_post()
 
     global $conn;
 
-        $post_id = $_GET['delete'];
-        $user_id = $_GET['u_id'];
-    if(is_admin() || ($_SESSION['user_id'] == $user_id)) {
+    $post_id = $_GET['delete'];
+    $user_id = $_GET['u_id'];
+    if (is_admin() || ($_SESSION['user_id'] == $user_id)) {
         $query = "DELETE FROM posts WHERE post_id = ?";
         $stmt = mysqli_prepare($conn, $query);
         mysqli_stmt_bind_param($stmt, 'i', $post_id);
@@ -130,11 +124,11 @@ function delete_comment()
 {
 
     global $conn;
-        $delete_comment_id = $_GET['delete'];
-        $query = "DELETE FROM comments WHERE comment_id = ?";
-        $stmt = mysqli_prepare($conn, $query);
-        mysqli_stmt_bind_param($stmt, 'i', $delete_comment_id);
-        mysqli_stmt_execute($stmt);
+    $delete_comment_id = $_GET['delete'];
+    $query = "DELETE FROM comments WHERE comment_id = ?";
+    $stmt = mysqli_prepare($conn, $query);
+    mysqli_stmt_bind_param($stmt, 'i', $delete_comment_id);
+    mysqli_stmt_execute($stmt);
     redirect("cms/admin/comments.php?u_id={$_GET['u_id']}");
 }
 
@@ -277,14 +271,14 @@ function user_loggedin_redirect($redirect_location = null)
 
 
 
-function delete_user($user_id)
-{
-    echo "<td><a>dslkfj</a></td>";
-    echo "<form action='' method='post'>";
-    echo    "<input type='hidden' class='hidden d-none' name='user_id' value='$user_id'>";
-    echo    "<td><input class='btn btn-danger' type='submit' value='Delete' name='delete'></td>";
-    echo "</form>";
-}
+// function delete_user($user_id)
+// {
+//     echo "<td><a>dslkfj</a></td>";
+//     echo "<form action='' method='post'>";
+//     echo    "<input type='hidden' class='hidden d-none' name='user_id' value='$user_id'>";
+//     echo    "<td><input class='btn btn-danger' type='submit' value='Delete' name='delete'></td>";
+//     echo "</form>";
+// }
 
 
 function fetch_records($result)
@@ -515,16 +509,16 @@ function update_post()
         $row = mysqli_fetch_assoc($select_image);
         $post_image = $row['post_image'];
     }
-    if(is_admin()) {
-    $post_status = $_POST['post_status'];
-    $post_user_id = $_POST['post_user_id'];
-    $query = "UPDATE posts SET post_title = ?, post_category_id = ?, post_date = ?, post_user_id= ?, post_status = ?, post_tags = ?, post_content = ?, post_image = ? WHERE post_id = ?";
-    $types = 'sisissssi';
-    $args = [$post_title, $post_category_id, $post_date, $post_user_id, $post_status, $post_tags, $post_content, $post_image, $post_id];
+    if (is_admin()) {
+        $post_status = $_POST['post_status'];
+        $post_user_id = $_POST['post_user_id'];
+        $query = "UPDATE posts SET post_title = ?, post_category_id = ?, post_date = ?, post_user_id= ?, post_status = ?, post_tags = ?, post_content = ?, post_image = ? WHERE post_id = ?";
+        $types = 'sisissssi';
+        $args = [$post_title, $post_category_id, $post_date, $post_user_id, $post_status, $post_tags, $post_content, $post_image, $post_id];
     } else {
-    $query = "UPDATE posts SET post_title = ?, post_category_id = ?, post_date = ?,  post_tags = ?, post_content = ?, post_image = ? WHERE post_id = ?";
-    $types = 'sissssi';
-    $args = [$post_title, $post_category_id, $post_date, $post_tags, $post_content, $post_image, $post_id];
+        $query = "UPDATE posts SET post_title = ?, post_category_id = ?, post_date = ?,  post_tags = ?, post_content = ?, post_image = ? WHERE post_id = ?";
+        $types = 'sissssi';
+        $args = [$post_title, $post_category_id, $post_date, $post_tags, $post_content, $post_image, $post_id];
     }
     if ($stmt = mysqli_prepare($conn, $query)) {
         mysqli_stmt_bind_param($stmt, $types, ...$args);
@@ -553,64 +547,64 @@ function get_users_options()
 {
     global $conn;
 
-    $query_users= "SELECT user_name, user_id FROM users";
-    $users= mysqli_query($conn, $query_users);
-    while($row = mysqli_fetch_assoc($users)) {
+    $query_users = "SELECT user_name, user_id FROM users";
+    $users = mysqli_query($conn, $query_users);
+    while ($row = mysqli_fetch_assoc($users)) {
         $user_id = $row['user_id'];
         $user_name = $row['user_name'];
-                echo "<option value='$user_id'>$user_name</option>";
+        echo "<option value='$user_id'>$user_name</option>";
     }
 }
 
-            function update_user_image()
-            {
-                global $conn;
-                $user_image = $_FILES['image']['name'];
-                $user_image_tmp = $_FILES['image']['tmp_name'];
-                move_uploaded_file($user_image_tmp, "../images/$user_image");
-                if (empty($user_image)) {
-                    $query = "SELECT user_image FROM users WHERE user_id = {$_SESSION['user_id']}";
-                    $select_image = mysqli_query($conn, $query);
-                    $row = mysqli_fetch_assoc($select_image);
-                    $user_image = $row['user_image'];
-                }
-                if($stmt = mysqli_prepare($conn, "UPDATE users SET user_image = ? WHERE user_id = {$_SESSION['user_id']}")) {
+function update_user_image()
+{
+    global $conn;
+    $user_image = $_FILES['image']['name'];
+    $user_image_tmp = $_FILES['image']['tmp_name'];
+    move_uploaded_file($user_image_tmp, "../images/$user_image");
+    if (empty($user_image)) {
+        $query = "SELECT user_image FROM users WHERE user_id = {$_SESSION['user_id']}";
+        $select_image = mysqli_query($conn, $query);
+        $row = mysqli_fetch_assoc($select_image);
+        $user_image = $row['user_image'];
+    }
+    if ($stmt = mysqli_prepare($conn, "UPDATE users SET user_image = ? WHERE user_id = {$_SESSION['user_id']}")) {
 
-                mysqli_stmt_bind_param($stmt, 's', $user_image);
-                mysqli_stmt_execute($stmt);
-                return true;
-                } else {
-                    
-                    mysqli_error($conn);
-                    return false;
-                }
-            }
-                                function update_user()
-                                {
-                                    global $conn;
+        mysqli_stmt_bind_param($stmt, 's', $user_image);
+        mysqli_stmt_execute($stmt);
+        return true;
+    } else {
 
-                                    $user_firstname = $_POST['user_firstname'];
-                                    $user_lastname = $_POST['user_lastname'];
-                                    $user_email = $_POST['user_email'];
+        mysqli_error($conn);
+        return false;
+    }
+}
+function update_user()
+{
+    global $conn;
 
-                                    if (!empty($_POST['user_password'])) {
-                                        $password_to_hash = $_POST['user_password'];
-                                        $user_password = password_hash($password_to_hash, PASSWORD_BCRYPT, array('cost' => 12));
+    $user_firstname = $_POST['user_firstname'];
+    $user_lastname = $_POST['user_lastname'];
+    $user_email = $_POST['user_email'];
 
-                                        $query = "UPDATE users SET  user_firstname = ?, user_lastname= ?, user_password = ? user_email = ? WHERE user_id = {$_SESSION['user_id']}";
-                                        $stmt = mysqli_prepare($conn, $query);
-                                        mysqli_stmt_bind_param($stmt, 'ssss',  $user_firstname, $user_lastname, $user_password, $user_email);
-                                    } else {
-                                        $query = "UPDATE users SET  user_firstname = ?, user_lastname= ?, user_email = ? WHERE user_id = {$_SESSION['user_id']}";
-                                        $stmt = mysqli_prepare($conn, $query);
-                                        mysqli_stmt_bind_param($stmt, 'sss',  $user_firstname, $user_lastname,  $user_email);
-                                    }
-                                    if (mysqli_stmt_execute($stmt)) {
-                                        return true;
-                                    } else {
-                                        return false;
-                                    }
-                                }
+    if (!empty($_POST['user_password'])) {
+        $password_to_hash = $_POST['user_password'];
+        $user_password = password_hash($password_to_hash, PASSWORD_BCRYPT, array('cost' => 12));
+
+        $query = "UPDATE users SET  user_firstname = ?, user_lastname= ?, user_password = ? user_email = ? WHERE user_id = {$_SESSION['user_id']}";
+        $stmt = mysqli_prepare($conn, $query);
+        mysqli_stmt_bind_param($stmt, 'ssss',  $user_firstname, $user_lastname, $user_password, $user_email);
+    } else {
+        $query = "UPDATE users SET  user_firstname = ?, user_lastname= ?, user_email = ? WHERE user_id = {$_SESSION['user_id']}";
+        $stmt = mysqli_prepare($conn, $query);
+        mysqli_stmt_bind_param($stmt, 'sss',  $user_firstname, $user_lastname,  $user_email);
+    }
+    if (mysqli_stmt_execute($stmt)) {
+        return true;
+    } else {
+        return false;
+    }
+}
 function get_comments()
 {
     global $conn;
@@ -636,7 +630,8 @@ function get_post_by_post_id($comment_post_id)
 }
 
 
-function change_comment_status($comment_id, $action) {
+function change_comment_status($comment_id, $action)
+{
     global $conn;
     $query = "UPDATE comments SET comment_status = ? WHERE comment_id = ?";
     $stmt = mysqli_prepare($conn, $query);
@@ -644,5 +639,64 @@ function change_comment_status($comment_id, $action) {
     mysqli_stmt_execute($stmt);
     mysqli_stmt_close($stmt);
     redirect("cms/admin/comments.php?u_id={$_GET['u_id']}");
-
 }
+
+
+function delete_user()
+{
+
+    global $conn;
+    $user_id_to_delete = $_POST['user_id'];
+    $query = "DELETE FROM users WHERE user_id= $user_id_to_delete";
+    $delete_query = mysqli_query($conn, $query);
+    redirect("cms/admin/users.php");
+}
+function set_admin()
+{
+    global $conn;
+    $user_id = $_GET['set_admin'];
+    $query = "UPDATE users SET user_role = 'admin' WHERE user_id = $user_id";
+    $set_admin_query = mysqli_query($conn, $query);
+    redirect("cms/admin/users.php");
+}
+function unset_admin()
+{
+    global $conn;
+    $user_id = $_GET['unset_admin'];
+    $query = "UPDATE users SET user_role = 'user' WHERE user_id = $user_id";
+    $set_admin_query = mysqli_query($conn, $query);
+    redirect("cms/admin/users.php");
+}
+
+            function show_all_users() {
+                global $conn;
+                $query = "SELECT * FROM users ORDER BY user_id DESC";
+                $users = mysqli_query($conn, $query);
+                while ($row = mysqli_fetch_assoc($users)) {
+                    $user_id = $row['user_id'];
+                    $user_name = $row['user_name'];
+                    $user_firstname = $row['user_firstname'];
+                    $user_lastname = $row['user_lastname'];
+                    $user_email = $row['user_email'];
+                    $user_image = $row['user_image'];
+                    $user_role = $row['user_role'];
+                    echo
+                    "<tr>
+                        <td>$user_id</td>
+                        <td>$user_name</td>
+                        <td>$user_firstname</td>
+                        <td>$user_lastname</td>
+                        <td>$user_email</td>
+                        <td>$user_image</td>
+                        <td>$user_role</td>
+                        <td><a class='btn btn-primary' href='users.php?source=edit_user&u_id=$user_id'>Edit</a></td>
+                            <form action='' method='post'>
+                                <input type='hidden' class='hidden' name='user_id' value='$user_id'>
+                                <td><input class='btn btn-danger' type='submit' value='Delete' name='delete'></td>
+                            </form>
+                        <td><a class='btn btn-info' href='users.php?set_admin=$user_id'>set admin</a></td>
+                        <td><a class='btn btn-success' href='users.php?unset_admin=$user_id'>set user</a></td>
+                        </tr>";
+
+            }
+        }
