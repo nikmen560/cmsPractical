@@ -65,3 +65,6 @@
         </ul>
     </div>
 </nav>
+
+<!-- body content -->
+    <div class="container"> 

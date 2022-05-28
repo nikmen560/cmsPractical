@@ -25,7 +25,12 @@ if (is_method('post') && isset($_POST['login'])) {
 		$login_validation['error'] = true;
 	} else {
 
-		redirect("cms/admin/profile.php");
+		if(is_admin()) {
+
+		redirect("cms/admin/dashboard.php");
+		} else {
+		redirect("cms/admin/index.php");
+		}
 	}
 }
 

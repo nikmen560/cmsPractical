@@ -23,14 +23,13 @@
                         $posts = get_all_posts();
                     }
                     ?>
-                    <div class="card-deck">
+                    <div class="card-columns">
                         <?php foreach ($posts as $post) : ?>
                             <div class="card">
                                 <img class="card-img-top" src="/cms/images/<?= $post['post_image'] ?>" alt="image <?= $post['post_title'] ?>">
                                 <div class="card-body">
                                     <h5 class="card-title"><?= $post['post_title'] ?></h5>
                                     <p class="card-text"><?= substr($post['post_content'], 0, 100) ?></p>
-                                    <!-- TODO : CARDS INSTEAD OF TABLE -->
                                 </div>
                                 <div class="card-footer">
                                     <div class="row justify-content-around">
@@ -41,7 +40,11 @@
                                     <div class="btn-group btn-group-sm">
                                         <a href="/cms/post/<?= $post['post_id'] ?>" class="btn btn-info">View</a>
                                         <a href="/cms/admin/posts.php?source=edit_post&p_id=<?= $post['post_id'] ?>" class="btn btn-secondary">Edit</a>
+                                        <?php if(is_admin()): ?>
+                                        <a href="/cms/admin/posts.php?delete=<?=$post['post_id']?>" class="btn btn-danger">Delete</a>
+                                        <?php else: ?>
                                         <a href="/cms/admin/posts.php?u_id=<?=$user_id?>&delete=<?=$post['post_id']?>" class="btn btn-danger">Delete</a>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
 

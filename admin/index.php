@@ -16,14 +16,15 @@ $comment_unnaproved_count = count_rows_by_user('comments', 'comment_user_id', 'c
     <div id="page-wrapper">
         <div class="container-fluid">
             <div class="row mt-10 mb-10">
-                <div class="col-lg-12">
+                <div class="col-lg-12 mt-3 mb-2 text-center">
                     <h1 class="page-header">
-                        welcome to user dashboard <?php echo get_current_username() ?>
+                        Dashboard
                     </h1>
+                        <h6><?php echo get_current_username() ?></h6>
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-6">
+                <div class="col-sm-6 mb-3">
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">Posts</h5>
@@ -41,7 +42,7 @@ $comment_unnaproved_count = count_rows_by_user('comments', 'comment_user_id', 'c
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-6 mb-5">
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">Likes</h5>
