@@ -608,11 +608,10 @@ function update_user()
 function get_comments()
 {
     global $conn;
-    $user_id = $_GET['u_id'];
     if (is_admin()) {
         $query = "SELECT * FROM comments ORDER BY comment_id DESC";
     } else {
-
+        $user_id = $_GET['u_id'];
         $query = "SELECT * FROM comments WHERE comment_user_id = $user_id  ORDER BY comment_id DESC";
     }
     $query = mysqli_query($conn, $query);
@@ -638,7 +637,12 @@ function change_comment_status($comment_id, $action)
     mysqli_stmt_bind_param($stmt, 'si', $action, $comment_id);
     mysqli_stmt_execute($stmt);
     mysqli_stmt_close($stmt);
-    redirect("cms/admin/comments.php?u_id={$_GET['u_id']}");
+    if(is_admin()) {
+        redirect("cms/admin/comments.php");
+    } else {
+
+        redirect("cms/admin/comments.php?u_id={$_GET['u_id']}");
+    }
 }
 
 

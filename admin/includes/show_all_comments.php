@@ -1,5 +1,7 @@
 <?php
-$user_id = $_GET['u_id'];
+if (isset($_GET['u_id'])) {
+    $user_id = $_GET['u_id'];
+}
 $comments = get_comments();
 
 if (isset($_GET['delete']) && (is_admin() || $_GET['u_id'] === $_SESSION['user_id'])) { // delete comment
@@ -7,11 +9,11 @@ if (isset($_GET['delete']) && (is_admin() || $_GET['u_id'] === $_SESSION['user_i
 }
 if (isset($_GET['approve'])) {
     $comment_id = $_GET['approve'];
-    change_comment_status($comment_id,'approved');
+    change_comment_status($comment_id, 'approved');
 }
 if (isset($_GET['unapprove'])) {
     $comment_id = $_GET['unapprove'];
-    change_comment_status($comment_id,'unapproved');
+    change_comment_status($comment_id, 'unapproved');
 }
 ?>
 <div class="row d-flex justify-content-center mt-100 mb-100">
@@ -35,17 +37,24 @@ if (isset($_GET['unapprove'])) {
                             </a>
                             <span class="text-muted float-right"><?= $comment['comment_status'] ?></span>
                             <span class="m-b-15 d-block"><?= $comment['comment_content'] ?></span>
-                            <div class="comment-footer"> 
+                            <div class="comment-footer">
                                 <span class="text-muted float-right"><?= $comment['comment_date'] ?></span>
-                                <a href="/cms/admin/comments.php?u_id=<?= $user_id ?>&delete=<?= $comment['comment_id'] ?>"></a>
-                                <?php if(is_admin() && $comment['comment_status'] == 'unapproved'): ?>
-                                    <a class="btn btn-success btn-sm" href="/cms/admin/comments.php?u_id=<?= $user_id ?>&approve=<?= $comment['comment_id'] ?>">Publish</a>
-                                <?php elseif(is_admin() && $comment['comment_status'] == 'approved'): ?>
-                                    <a class="btn btn-info btn-sm" href="/cms/admin/comments.php?u_id=<?= $user_id ?>&unapprove=<?= $comment['comment_id'] ?>">Unapprove</a>
-                                <?php endif; ?>
-                                <?php if(is_admin() || $_GET['u_id'] == $_SESSION['user_id']): ?>
-                                    <a class="btn btn-danger btn-sm" href="/cms/admin/comments.php?u_id=<?= $user_id ?>&delete=<?= $comment['comment_id'] ?>">Delete</a>
+
+                                <?php if (is_admin()) : ?>
+                                    <?php if ($comment['comment_status'] == 'unapproved') : ?>
+                                        <a class="btn btn-success btn-sm" href="/cms/admin/comments.php?approve=<?= $comment['comment_id'] ?>">Publish</a>
+                                    <?php elseif ($comment['comment_status'] == 'approved') : ?>
+                                        <a class="btn btn-info btn-sm" href="/cms/admin/comments.php?unapprove=<?= $comment['comment_id'] ?>">Unapprove</a>
                                     <?php endif; ?>
+
+                                    <a class="btn btn-danger btn-sm" href="/cms/admin/comments.php?&delete=<?= $comment['comment_id'] ?>">Delete</a>
+
+                                <?php else : ?>
+                                    <a href="/cms/admin/comments.php?u_id=<?= $user_id ?>&delete=<?= $comment['comment_id'] ?>"></a>
+                                    <?php if ($_GET['u_id'] == $_SESSION['user_id']) : ?>
+                                        <a class="btn btn-danger btn-sm" href="/cms/admin/comments.php?u_id=<?= $user_id ?>&delete=<?= $comment['comment_id'] ?>">Delete</a>
+                                    <?php endif; ?>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>

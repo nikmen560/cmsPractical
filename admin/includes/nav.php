@@ -58,6 +58,9 @@
                     <a class="dropdown-item" href="users.php">All users</a> 
                 </div>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/cms/admin/comments.php">Comments</a>
+            </li>
             <?php endif; ?>
             <li class="nav-item">
                 <a class="nav-link" href="/cms">Home page</a>
