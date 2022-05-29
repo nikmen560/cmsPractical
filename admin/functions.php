@@ -316,16 +316,18 @@ function add_columns_to_chart(...$args)
 
 function add_post()
 {
-
     global $conn;
-
-    if (isset($_POST['create_post'])) {
-
         $post_title = escape($_POST['title']);
-
+        if(!is_admin()) {
+            $post_status = 'drafted';
+            $post_user_id = $_SESSION['user_id'];
+        } else {
         $post_user_id = escape($_POST['author']);
-        $post_category_id = escape($_POST['post_category_id']);
         $post_status = $_POST['post_status'];
+
+        }
+
+        $post_category_id = escape($_POST['post_category_id']);
 
         $post_image = $_FILES['image']['name'];
         $post_image_temp = $_FILES['image']['tmp_name'];
@@ -342,19 +344,14 @@ function add_post()
         $query = "INSERT INTO posts (post_category_id, post_user_id, post_title, post_date, post_image,post_content,post_tags,post_status) 
     VALUES($post_category_id, $post_user_id, '$post_title',  now(), '$post_image', '$post_content', '$post_tags',  '$post_status')";
 
-        // TODO: ESCAPE EVERY SQL QUERY
-        // TODO: USE ONLY USER_ID OF IN DB not 3 fields.
-
         $add_post = mysqli_query($conn, $query);
-
         $post_id = mysqli_insert_id($conn);
 
         if (!$add_post) {
-            die("poized " . mysqli_error($conn));
+            return false;
         } else {
-            echo "<p class='bg-success'>Post created <a href='../post.php?p_id=$post_id'> View Post</a></p>";
+            return true;
         }
-    }
 }
 
 function show_categories()
