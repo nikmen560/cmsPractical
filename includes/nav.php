@@ -49,7 +49,7 @@
                     <li class='$login_class float-left'><a href='/cms/login.php'>Log In</a></li>
                 <?php else: ?>  
                     <li><a href='/cms/admin/includes/logout.php'>logout</a></li>
-                    <li><a href='/cms/admin/index.php'>Admin</a></li>
+                    <li><a href='/cms/admin/<?php if(is_admin()) {echo "dashboard.php";} else {echo "index.php";} ?>'>Admin</a></li>
                     <?php endif; ?>
             </ul>
         </div>
