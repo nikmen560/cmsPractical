@@ -235,11 +235,11 @@ function page_counter()
 function page_counter_filtered($post_status, $category_id = null)
 {
     global $conn;
-    if(is_null($category_id)){ 
-    $post_query_count = "SELECT * FROM posts WHERE post_status = '$post_status'";
+    if (is_null($category_id)) {
+        $post_query_count = "SELECT * FROM posts WHERE post_status = '$post_status'";
     } else {
 
-    $post_query_count = "SELECT * FROM posts WHERE post_status = '$post_status' AND post_category_id = '$category_id'";
+        $post_query_count = "SELECT * FROM posts WHERE post_status = '$post_status' AND post_category_id = '$category_id'";
     }
     $find_count = mysqli_query($conn, $post_query_count);
     $count = mysqli_num_rows($find_count);
@@ -280,5 +280,12 @@ function get_all_posts_by_category($page_1, $per_page)
     return mysqli_fetch_all($select_all_posts_query, MYSQLI_ASSOC);
 }
 
+function get_post_comments($post_id)
+{
+    global $conn;
+    $query = "SELECT * FROM comments WHERE comment_post_id= $post_id AND comment_status = 'approved' ORDER BY comment_id DESC ";
+    $select_all_comments = mysqli_query($conn, $query);
+    return mysqli_fetch_all($select_all_comments, MYSQLI_ASSOC);
+}
 
 ?>

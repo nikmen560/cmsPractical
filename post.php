@@ -12,6 +12,7 @@ if (!isset($_GET['p_id'])) {
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     update_post_views();
 }
+$comments = get_post_comments($_GET['p_id']);
 $post_data = get_post_by_get();
 $post_user = get_post_user_by_id($post_data['post_user_id']);
 $post_user_name = $post_user['user_name'];
@@ -30,6 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) { // ADD NE
 
 ?>
 <div class="container">
+
     <div class="row">
         <div class="col-md-8">
             <h1 class="page-header">
@@ -51,9 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) { // ADD NE
             </div>
             <hr>
             <img class="img-responsive" src="/cms/images/<?php echo image_placeholder($post_data['post_image']) ?>" alt="">
-            <hr>
-            <p><?php echo $post_data['post_content'] ?> </p>
-
+                <p ><?php echo $post_data['post_content'] ?> </p>
             <hr>
             <?php if (isset($is_liked) && !$is_liked) : ?>
                 <div class="row">
@@ -85,11 +85,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) { // ADD NE
                 </div>
             <?php endif; ?>
             <?php
-            //TODO: CORRECT WHILE LOOPS
-                $query = "SELECT * FROM comments WHERE comment_post_id= $post_id AND comment_status = 'approved' ORDER BY comment_id DESC ";
-                $select_all_comments = mysqli_query($conn, $query);
-            while ($comments = mysqli_fetch_array($select_all_comments)) :
-                $author_data = get_user_by_id($comments['comment_user_id']);
+            foreach($comments as $comment):
+                $author_data = get_user_by_id($comment['comment_user_id']);
             ?>
 
                 <div class="media">
@@ -98,25 +95,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) { // ADD NE
                     </a>
                     <div class="media-body">
                         <h4 class="media-heading"> <?php echo $author_data['user_name'] ?>
-                            <small><?php echo $comments['comment_date'] ?></small>
+                            <small><?php echo $comment['comment_date'] ?></small>
                         </h4>
                         <small><?php echo $author_data['user_email'] ?></small>
                         <div>
-                            <?php echo '> ' . $comments['comment_content'] ?>
+                            <?php echo '> ' . $comment['comment_content'] ?>
                         </div>
                     </div>
                 </div>
                 <hr>
 
-                <?php // endforeach; ?>
-                <?php endwhile; ?>
+                <?php  endforeach; ?>
         </div>
-        <!-- Blog Sidebar Widgets Column -->
         <?php include "includes/sidebar.php" ?>
-    </div>
-    <!-- /.row -->
 
     <hr>
+
+
 
     <?php include "includes/footer.php" ?>
 
@@ -124,12 +119,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) { // ADD NE
         <?php if (isset($_SESSION['user_id'])) : ?>
             $(document).ready(function() {
                 $("[data-toggle = 'tooltip']").tooltip();
-                var post_id = <?php echo $p_id; ?>;
+                let post_id = <?php echo $post_id; ?>;
                 let user_id = <?php echo $_SESSION['user_id']; ?>;
 
                 $('#likeButton').click(function() {
                     $.ajax({
-                        url: "/cms/post.php?p_id=<?php echo $p_id; ?>",
+                        url: "/cms/post/<?php echo $post_id; ?>",
                         type: 'post',
                         data: {
                             'liked': 1,
@@ -143,7 +138,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) { // ADD NE
                 $('#unlikeButton').click(function() {
 
                     $.ajax({
-                        url: "/cms/post.php?p_id=<?php echo $p_id; ?>",
+                        url: "/cms/post/<?php echo $post_id; ?>",
                         type: 'post',
                         data: {
                             'unliked': 1,
