@@ -38,7 +38,7 @@
                     <img class="img-responsive" src="images/<?php echo image_placeholder($post['post_image']); ?>" alt="">
                 </a>
                 <hr>
-                <p><?php echo substr($post['post_content'], 0, 200)?> </p>
+                <p><?php echo substr($post['post_content'], 0, 100)?> </p>
                 <a class="btn btn-primary" href="post.php?p_id=<?php echo $post['post_id']; ?>">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
                 <hr>
             <?php endforeach; ?>
@@ -52,9 +52,11 @@
         <?php
         for ($i = 1; $i <= $count; $i++) {
             if ($i == $page) {
-                echo "<li class='page-item active'><a class='page-link' href='index.php?page=$i'>$i</a></li>";
+                echo "<li class='page-item active'><a class='page-link' href='$i'>$i</a></li>";
+                // echo "<li class='page-item active'><a class='page-link' href='index.php?page=$i'>$i</a></li>";
             } else {
-                echo "<li class='page-item'><a class='page-link' href='index.php?page=$i'>$i</a></li>";
+                echo "<li class='page-item'><a class='page-link' href='$i'>$i</a></li>";
+                // echo "<li class='page-item'><a class='page-link' href='index.php?page=$i'>$i</a></li>";
             }
         }
         ?>

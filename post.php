@@ -78,12 +78,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) { // ADD NE
                     </form>
                 </div>
                 <hr>
-            <?php else : ?>
 
+            <?php else : ?>
                 <div class="row">
                     <h4>To leave a comment you should <a href="/cms/login.php">log in</a></h4>
                 </div>
             <?php endif; ?>
+
             <?php
             foreach($comments as $comment):
                 $author_data = get_user_by_id($comment['comment_user_id']);
