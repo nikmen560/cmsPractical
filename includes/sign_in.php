@@ -9,5 +9,5 @@ session_start();
 if (isset($_POST['submit_login'])) {
     $user_name = escape($_POST['user_name']);
     $user_password = escape($_POST['user_password']);
-    login_user($user_name, $user_password);
+    log_in($user_name, $user_password);
 }

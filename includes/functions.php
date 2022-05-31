@@ -111,7 +111,6 @@ function log_in($username, $password)
         $db_user_email = $row['user_email'];
         $db_user_image = $row['user_image'];
         $db_user_role = $row['user_role'];
-        $db_user_randSalt = $row['randSalt'];
 
 
 
@@ -286,6 +285,13 @@ function get_post_comments($post_id)
     $query = "SELECT * FROM comments WHERE comment_post_id= $post_id AND comment_status = 'approved' ORDER BY comment_id DESC ";
     $select_all_comments = mysqli_query($conn, $query);
     return mysqli_fetch_all($select_all_comments, MYSQLI_ASSOC);
+}
+function get_all_categories()
+{
+    global $conn;
+    $query = "SELECT * FROM categories";
+    $categories = mysqli_query($conn, $query);
+    return mysqli_fetch_all($categories, MYSQLI_ASSOC);
 }
 
 ?>
