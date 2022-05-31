@@ -1,17 +1,7 @@
  <?php include "includes/header.php"; ?>
-
-
- <!-- Navigation -->
-
  <?php include "includes/nav.php"; ?>
  <?php include "includes/alert.php"; ?>
- <?php include "includes/functions.php"; ?>
-
-
-
-
  <?php
-
     if(isset($_GET['lang']) && !empty($_GET['lang'])) {
         $_SESSION['lang'] = $_GET['lang'];
 
@@ -19,15 +9,12 @@
              echo "<script>location.reload()</script>";
         }
     }
-
         if(isset($_SESSION['lang'])) {
             include "admin/includes/languages/" . $_SESSION['lang'] . ".php";
         } else {
             include "admin/includes/languages/en.php";
         }
-
     $message = $alert_color = $alert_content = '';
-
     if ($_SERVER['REQUEST_METHOD'] == "POST") {
         $username = mysqli_real_escape_string($conn, trim($_POST['username']));
         $email = mysqli_real_escape_string($conn, trim($_POST['email']));
@@ -52,21 +39,12 @@
             $alert_content = "
             <hr>
             <p class='text-center mg-0'>Now you can <a href='login.php'>log in</a></p>
-            
             ";
-
         }
     }
         ?>
 
-
-
-
- <!-- Page Content -->
- <div class="container">
-
      <section id="login">
-         <div class="container">
              <form action="" method="get" id="language_form" class="navbar-form navbar-right">
                  <div class="form-group">
                      <select name="lang" id="select_language">
@@ -99,7 +77,6 @@
                      </div>
                  </div> <!-- /.col-xs-12 -->
              </div> <!-- /.row -->
-         </div> <!-- /.container -->
      </section>
 
 
