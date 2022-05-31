@@ -1,6 +1,12 @@
 
 <?php
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
+require './vendor/autoload.php';
+
 function image_placeholder($image)
 {
     if (!$image) {
@@ -293,5 +299,52 @@ function get_all_categories()
     $categories = mysqli_query($conn, $query);
     return mysqli_fetch_all($categories, MYSQLI_ASSOC);
 }
+function send_message($subject, $email, $body)
+{
+    $mail = new PHPMailer(true);
+    $mail->isSMTP();                                            //Send using SMTP
+    $mail->Host       = Config::SMTP_HOST;                     //Set the SMTP server to send through
+    $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+    $mail->Username   = Config::SMTP_USER;                     //SMTP username
+    $mail->Password   =  Config::SMTP_PASSWORD;                              //SMTP password
+    // $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
+    $mail->Port       = Config::SMTP_PORT;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+    $mail->SMTPSecure = 'tls';            //Enable implicit TLS encryption
+    $mail->CharSet = 'UTF-8';
+
+    //Recipients
+    $mail->setFrom($email, 'User');
+    $mail->addAddress('nik.kow@outlook.com', 'Project Author');     //Add a recipient
+    $mail->addAddress('ellen@example.com');               //Name is optional
+    $mail->addReplyTo('info@example.com', 'Information');
+    $mail->addCC('cc@example.com');
+    $mail->addBCC('bcc@example.com');
+    //Attachments
+    //Content
+    $mail->isHTML(true);                                  //Set email format to HTML
+    $mail->Subject = $subject;
+    $mail->Body    = $body;
+
+    if ($mail->send()) {
+        return  true;
+    } else {
+        return false;
+    }
+}
+function send_contact_me()
+{
+    global $conn;
+    $subject = mysqli_real_escape_string($conn, $_POST['subject']);
+    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $body = mysqli_real_escape_string($conn, $_POST['body']);
+    $body = wordwrap($body, 70);
+    if (send_message($subject, $email, $body)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+
 
 ?>
