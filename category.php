@@ -1,7 +1,6 @@
 <?php
 include "includes/header.php";
 include "includes/nav.php";
-include "includes/functions.php";
 ?>
 <?php
 if (!isset($_GET['category_id'])) {

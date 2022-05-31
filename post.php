@@ -1,7 +1,6 @@
 <?php ob_start(); ?>
 <?php include "includes/header.php";
 include "includes/nav.php";
-include "includes/functions.php";
 
 ?>
 

@@ -1,6 +1,5 @@
 <?php include "includes/header.php"; ?>
 <?php include "includes/nav.php"; ?>
-<?php include "includes/functions.php"; ?>
 <?php 
             $count = page_counter();
             $per_page = 5;
