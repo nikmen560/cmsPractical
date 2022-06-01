@@ -38,7 +38,7 @@
                                     <p class="card-text"><small class="text-muted">Likes: <?= $post['post_likes'] ?></small></p>
                                     </div>
                                     <div class="btn-group btn-group-sm">
-                                        <a href="/cms/post/<?= $post['post_id'] ?>" class="btn btn-info">View</a>
+                                        <a href="/cms/post/<?=$post['post_id'] ?>" class="btn btn-info">View</a>
                                         <a href="/cms/admin/posts.php?source=edit_post&p_id=<?= $post['post_id'] ?>" class="btn btn-secondary">Edit</a>
                                         <?php if(is_admin()): ?>
                                         <a href="/cms/admin/posts.php?delete=<?=$post['post_id']?>" class="btn btn-danger">Delete</a>

@@ -1,15 +1,10 @@
 <?php include "includes/header.php"; ?>
 <?php include_once "includes/alert.php"; ?>
 
-
-
 <!-- Navigation -->
-
 <?php include "includes/nav.php"; ?>
 
-
 <?php
-
 //TODO: login popup create
 $login_validation = [
 	'error_message' => '',
@@ -18,7 +13,6 @@ $login_validation = [
 if (is_method('post') && isset($_POST['login'])) {
 	$user_name = escape($_POST['username']);
 	$user_password = escape($_POST['password']);
-	include "includes/functions.php";
 	$log_in = log_in($user_name, $user_password);
 	if (!$log_in) {
 		$login_validation['error_message'] = 'username or password is not correct';
@@ -27,9 +21,9 @@ if (is_method('post') && isset($_POST['login'])) {
 
 		if(is_admin()) {
 
-		redirect("cms/admin/dashboard.php");
+		redirect("cms/admin/dashboard");
 		} else {
-		redirect("cms/admin/index.php");
+		redirect("cms/admin/index");
 		}
 	}
 }

@@ -34,8 +34,8 @@
                     <li class="<?= ($page_name == 'reristration') ? 'active':''; ?> pull-left"><a href='/cms/registration'>Sign Up</a></li>
                     <li class="<?= ($page_name == 'login') ? 'active':''; ?> pull-left"><a href='/cms/login'>Log In</a></li>
                 <?php else: ?>  
-                    <li><a href='/cms/admin/includes/logout.php'>logout</a></li>
-                    <li><a href='/cms/admin/<?php if(is_admin()) {echo "dashboard.php";} else {echo "index.php";} ?>'>Admin</a></li>
+                    <li><a href='/cms/admin/includes/logout.php'>Logout</a></li>
+                    <li><a href='/cms/admin/<?php if(is_admin()) {echo "dashboard";} else {echo "index";} ?>'>Dashboard</a></li>
                     <?php endif; ?>
             </ul>
         </div>

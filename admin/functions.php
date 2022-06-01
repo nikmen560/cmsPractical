@@ -14,9 +14,13 @@ function insert_category()
 {
     global $conn;
     $new_category_name = $_POST['cat_title'];
-    $stmt = mysqli_prepare($conn, "INSERT INTO categories (cat_title)  VALUES (?)");
+    if($stmt = mysqli_prepare($conn, "INSERT INTO categories (cat_title, category_user_id)  VALUES (?, {$_SESSION['user_id']})")) {
     mysqli_stmt_bind_param($stmt, 's', $new_category_name);
     mysqli_stmt_execute($stmt);
+    redirect('cms/admin/categories');
+    } else {
+        echo mysqli_error($conn);
+    }
 }
 
 function find_all_categories()
@@ -116,7 +120,12 @@ function delete_post()
         $stmt = mysqli_prepare($conn, $query);
         mysqli_stmt_bind_param($stmt, 'i', $post_id);
         mysqli_stmt_execute($stmt);
+        if(is_admin()) {
+        redirect("cms/admin/posts");
+        } else {
+
         redirect("cms/admin/posts.php?u_id={$_SESSION['user_id']}");
+        }
     }
 }
 
