@@ -5,11 +5,7 @@
         $is_added = add_post();
 
     }
-
-
-
 ?>
-
 
 <form action="" method="post" enctype="multipart/form-data">
 
@@ -42,6 +38,10 @@
     <div class="form-group">
         <input type="text" class="form-control" name="post_tags" placeholder="post tags">
     </div>
+    <div class="form-group">
+        <input type="text" class="form-control" name="post_description" placeholder="post description">
+    </div>
+    <!-- TODO: POST DESCRIPTION -->
     <div class="form-group">
         <textarea class="form-control" name="post_content" id="summernote" cols="30" rows="10" placeholder="post content"></textarea>
     </div>

@@ -37,7 +37,7 @@
                     <img class="img-responsive" src="images/<?php echo image_placeholder($post['post_image']); ?>" alt="">
                 </a>
                 <hr>
-                <p><?php echo substr($post['post_content'], 0, 100)?> </p>
+                <p><?php echo $post['post_description']?> </p>
                 <a class="btn btn-primary" href="post.php?p_id=<?php echo $post['post_id']; ?>">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
                 <hr>
             <?php endforeach; ?>

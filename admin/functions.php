@@ -343,6 +343,7 @@ function add_post()
 
 
         $post_tags = escape($_POST['post_tags']);
+        $post_description = escape($_POST['post_description']);
         $post_content = escape($_POST['post_content']);
 
         $post_date = date('d-m-y');
@@ -350,8 +351,8 @@ function add_post()
         move_uploaded_file($post_image_temp, "../images/$post_image");
 
 
-        $query = "INSERT INTO posts (post_category_id, post_user_id, post_title, post_date, post_image,post_content,post_tags,post_status) 
-    VALUES($post_category_id, $post_user_id, '$post_title',  now(), '$post_image', '$post_content', '$post_tags',  '$post_status')";
+        $query = "INSERT INTO posts (post_category_id, post_user_id, post_title, post_date, post_image, post_description, post_content,post_tags,post_status) 
+    VALUES($post_category_id, $post_user_id, '$post_title',  now(), '$post_image', '$post_description', '$post_content', '$post_tags',  '$post_status')";
 
         $add_post = mysqli_query($conn, $query);
         $post_id = mysqli_insert_id($conn);
@@ -506,6 +507,7 @@ function update_post()
     $post_image = $_FILES['image']['name'];
     $post_image_temp = $_FILES['image']['tmp_name'];
     $post_tags = $_POST['post_tags'];
+    $post_description = $_POST['post_description'];
     $post_content = $_POST['post_content'];
     move_uploaded_file($post_image_temp, "../images/$post_image");
 
@@ -518,13 +520,13 @@ function update_post()
     if (is_admin()) {
         $post_status = $_POST['post_status'];
         $post_user_id = $_POST['post_user_id'];
-        $query = "UPDATE posts SET post_title = ?, post_category_id = ?, post_date = ?, post_user_id= ?, post_status = ?, post_tags = ?, post_content = ?, post_image = ? WHERE post_id = ?";
-        $types = 'sisissssi';
-        $args = [$post_title, $post_category_id, $post_date, $post_user_id, $post_status, $post_tags, $post_content, $post_image, $post_id];
+        $query = "UPDATE posts SET post_title = ?, post_category_id = ?, post_date = ?, post_user_id= ?, post_status = ?, post_tags = ?, post_description = ?, post_content = ?, post_image = ? WHERE post_id = ?";
+        $types = 'sisisssssi';
+        $args = [$post_title, $post_category_id, $post_date, $post_user_id, $post_status, $post_tags, $post_description, $post_content, $post_image, $post_id];
     } else {
-        $query = "UPDATE posts SET post_title = ?, post_category_id = ?, post_date = ?,  post_tags = ?, post_content = ?, post_image = ? WHERE post_id = ?";
-        $types = 'sissssi';
-        $args = [$post_title, $post_category_id, $post_date, $post_tags, $post_content, $post_image, $post_id];
+        $query = "UPDATE posts SET post_title = ?, post_category_id = ?, post_date = ?,  post_tags = ?, post_description = ?, post_content = ?, post_image = ? WHERE post_id = ?";
+        $types = 'sisssssi';
+        $args = [$post_title, $post_category_id, $post_date, $post_tags, $post_description, $post_content, $post_image, $post_id];
     }
     if ($stmt = mysqli_prepare($conn, $query)) {
         mysqli_stmt_bind_param($stmt, $types, ...$args);

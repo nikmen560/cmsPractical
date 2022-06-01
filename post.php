@@ -87,6 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) { // ADD NE
             foreach($comments as $comment):
                 $author_data = get_user_by_id($comment['comment_user_id']);
             ?>
+            <!-- TODO: FIX LAYOUT -->
 
                 <div class="media">
                     <a class="pull-left" href="#">

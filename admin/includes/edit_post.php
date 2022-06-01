@@ -64,6 +64,9 @@ if (is_logged_in()) {
         <input value="<?php echo $post_data['post_tags'] ?>" type="text" class="form-control" name="post_tags" placeholder="post tags">
     </div>
     <div class="form-group">
+        <input value="<?php echo $post_data['post_description'] ?>" type="text" class="form-control" name="post_description" placeholder="post description">
+    </div>
+    <div class="form-group">
         <textarea name="post_content" id="summernote" cols="30" rows="10" placeholder="post content">
     <?php echo $post_data['post_content'] ?>
     </textarea>
