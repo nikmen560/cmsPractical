@@ -32,7 +32,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) { // ADD NE
 <div class="container">
 
     <div class="row">
-        <div class="col-md-8">
             <h1 class="page-header">
                 <?php echo $post_data['post_title'] ?>
                 <?php
@@ -106,8 +105,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) { // ADD NE
                 <hr>
 
                 <?php  endforeach; ?>
-        </div>
-        <?php include "includes/sidebar.php" ?>
 
     <hr>
 
