@@ -33,19 +33,19 @@ if (!isset($_GET['category_id'])) {
                 $user_data = get_post_user_by_id($post['post_user_id']);
             ?>
                 <h1 class="page-header">
-                    <a href="post/<?php echo $post['post_id']; ?>"><?php echo $post['post_title'] ?></a>
+                    <a href="/cms/post/<?php echo $post['post_id']; ?>"><?php echo $post['post_title'] ?></a>
                 </h1>
                 <p class="lead">
-                    by <a href="author_posts.php?author=<?php echo $post['post_user_id'] ?>"><?php echo $user_data['user_name'] ?></a>
+                    by <a href="/cms/author/<?php echo $post['post_user_id'] ?>"><?php echo $user_data['user_name'] ?></a>
                 </p>
                 <p><span class="glyphicon glyphicon-time"></span> <?php echo "Posted on {$post['post_date']} " ?></p>
                 <hr>
-                <a href="../post/<?php echo $post['post_id'] ?> ">
-                    <img class="img-responsive" src="../images/<?php echo image_placeholder($post['post_image']); ?>" alt="">
+                <a href="/cms//post/<?php echo $post['post_id'] ?> ">
+                    <img class="img-responsive" src="/cms/images/<?php echo image_placeholder($post['post_image']); ?>" alt="">
                 </a>
                 <hr>
-                <p><?php echo substr($post['post_content'], 0, 150) ?> </p>
-                <a class="btn btn-primary" href="../post.php?p_id=<?php echo $post['post_id']; ?>">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
+                <p><?php echo $post['post_description']?> </p>
+                <a class="btn btn-primary" href="/cms/post.php?p_id=<?php echo $post['post_id']; ?>">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
                 <hr>
             <?php endforeach; ?>
         </div>

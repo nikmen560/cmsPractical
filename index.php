@@ -26,19 +26,19 @@
                 $user_data = get_post_user_by_id($post['post_user_id']);
             ?>
                 <h1 class="page-header">
-                    <a href="post/<?php echo $post['post_id']; ?>"><?php echo $post['post_title'] ?></a>
+                    <a href="/cms/post/<?php echo $post['post_id']; ?>"><?php echo $post['post_title'] ?></a>
                 </h1>
                 <p class="lead">
-                    by <a href="author_posts.php?author=<?php echo $post['post_user_id'] ?>"><?php echo $user_data['user_name'] ?></a>
+                    by <a href="/cms/author/<?php echo $post['post_user_id'] ?>"><?php echo $user_data['user_name'] ?></a>
                 </p>
                 <p><span class="glyphicon glyphicon-time"></span> <?php echo "Posted on {$post['post_date']} " ?></p>
                 <hr>
-                <a href="post/<?php echo $post['post_id'] ?> ">
+                <a href="/cms/post/<?php echo $post['post_id'] ?> ">
                     <img class="img-responsive" src="images/<?php echo image_placeholder($post['post_image']); ?>" alt="">
                 </a>
                 <hr>
                 <p><?php echo $post['post_description']?> </p>
-                <a class="btn btn-primary" href="post.php?p_id=<?php echo $post['post_id']; ?>">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
+                <a class="btn btn-primary" href="/cms/post/<?php echo $post['post_id']; ?>">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
                 <hr>
             <?php endforeach; ?>
         </div>
@@ -52,10 +52,8 @@
         for ($i = 1; $i <= $count; $i++) {
             if ($i == $page) {
                 echo "<li class='page-item active'><a class='page-link' href='$i'>$i</a></li>";
-                // echo "<li class='page-item active'><a class='page-link' href='index.php?page=$i'>$i</a></li>";
             } else {
                 echo "<li class='page-item'><a class='page-link' href='$i'>$i</a></li>";
-                // echo "<li class='page-item'><a class='page-link' href='index.php?page=$i'>$i</a></li>";
             }
         }
         ?>

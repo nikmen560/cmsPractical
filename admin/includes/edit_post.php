@@ -16,7 +16,7 @@ if (is_logged_in()) {
 }
 ?>
 
-<form action="" method="post" enctype="multipart/form-data">
+<form action="" method="post" enctype="multipart/form-data" onsubmit="return postForm()">
     <?php if(isset($is_updated) && $is_updated = true) : show_alert('success', "The post is updated <a href='../post.php?p_id=$post_id'>view post</a>"); ?>
     <?php elseif (isset($is_updated) && $is_updated = false) : show_alert('danger', "The post is not updated, something went wrong"); ?>
     <?php endif; ?>

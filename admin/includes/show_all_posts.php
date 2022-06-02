@@ -29,7 +29,7 @@
                                 <img class="card-img-top" src="/cms/images/<?= $post['post_image'] ?>" alt="image <?= $post['post_title'] ?>">
                                 <div class="card-body">
                                     <h5 class="card-title"><?= $post['post_title'] ?></h5>
-                                    <p class="card-text"><?= substr($post['post_content'], 0, 100) ?></p>
+                                    <p class="card-text"><?= $post['post_description'] ?></p>
                                 </div>
                                 <div class="card-footer">
                                     <div class="row justify-content-around">

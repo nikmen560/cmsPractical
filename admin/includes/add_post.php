@@ -7,7 +7,7 @@
     }
 ?>
 
-<form action="" method="post" enctype="multipart/form-data">
+<form action="" method="post" enctype="multipart/form-data" onsubmit="return postForm()">
 
 <?php if(isset($is_added) && $is_added) show_alert('success', "Post created");  ?>
     <div class="form-group">
@@ -50,11 +50,3 @@
     </div>
 
 </form>
-
-<script>
-    $(document).ready(function() {
-        $('#summernote').summernote({
-            height: 200
-        });
-    });
-</script>

@@ -4,7 +4,7 @@
     <!-- SEARCH BOX -->
     <div class="well">
         <h4>Blog Search</h4>
-        <form action="search.php" method="post">
+        <form action="/cms/search" method="post">
             <div class="input-group">
                 <input name="search" type="text" class="form-control">
                 <span class="input-group-btn">
@@ -33,11 +33,11 @@
                 </div>
             </form>
             <div class="form-group">
-                <a href="forgot/<?php echo uniqid(true) ?>">Forgot your password?</a>
+                <a href="/cms/forgot/<?php echo uniqid(true) ?>">Forgot your password?</a>
             </div>
         <?php else : ?>
             <h4 class='text-center'>Welcome <?= $_SESSION['username'] ?></h4>
-            <a href='admin/includes/logout.php' class='btn btn-block btn-warning'>Log out</a>
+            <a href='/cms/admin/includes/logout.php' class='btn btn-block btn-warning'>Log out</a>
             <a href='/cms/admin/index' class='btn btn-block btn-info'>User panel</a>
         <?php endif; ?>
     </div>
@@ -51,7 +51,7 @@
                     foreach ($categories as $category) {
                         $cat_id = $category['cat_id'];
                         $cat_title = $category['cat_title'];
-                        echo "<li><a href='category/$cat_id'>{$cat_title}</a></li>";
+                        echo "<li><a href='/cms/category/$cat_id'>{$cat_title}</a></li>";
                     }
                     ?>
                 </ul>

@@ -1,7 +1,8 @@
 RewriteEngine on
 
-RewriteRule ^(index|contact|registration|login)$ $1.php [NC,L]
+RewriteRule ^(index|contact|registration|login|search)$ $1.php [NC,L]
 RewriteRule  ^post/(\d+)$ post.php?p_id=$1 [NC,L]
+RewriteRule  ^author/(\d+)$ author_posts.php?author=$1 [NC,L]
 RewriteRule  ^category/(\d+)$ category.php?category_id=$1 [NC,L]
 RewriteRule  ^forgot/([-\w]+)$ forgot.php?forgot=$1 [NC,L]
 RewriteRule  ^(\d+)$ index.php?page=$1 [NC,L]

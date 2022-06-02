@@ -24,3 +24,17 @@ background-position: center;
 .pager li .active_link {
     background: gray !important;
 }
+
+.post_content {
+    overflow: hidden;
+    font-size: 20px;
+    margin-top: 50px;
+}
+.post_content > p > img {
+    display: block; 
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+  margin-top: 50px;
+  margin-bottom: 50px;
+}

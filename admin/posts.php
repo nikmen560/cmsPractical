@@ -36,3 +36,15 @@
                 </div>
             </div>
 <?php include "includes/footer_admin.php"; ?>
+
+<script>
+    $(document).ready(function() {
+        $('#summernote').summernote({
+            height: 200
+        });
+    });
+function postForm() {
+
+	$('textarea[name="post_content"]').html($('#summernote').code());
+}
+</script>

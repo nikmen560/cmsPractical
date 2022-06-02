@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) { // ADD NE
                 ?>
             </h1>
             <p class="lead">
-                by <a href="index.php"><?php echo $post_user['user_name'] ?></a>
+                by <a href="/cms/index"><?php echo $post_user['user_name'] ?></a>
             </p>
             <div>
                 <p class="float-right"><span class="glyphicon glyphicon-time"></span> <?php echo "Posted on {$post_data['post_date']}" ?></p>
@@ -51,7 +51,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) { // ADD NE
             </div>
             <hr>
             <img class="img-responsive" src="/cms/images/<?php echo image_placeholder($post_data['post_image']) ?>" alt="">
-                <p ><?php echo $post_data['post_content'] ?> </p>
+                
+
+            <div class="post_content"><?php echo $post_data['post_content'] ?> </div>
+
+
             <hr>
             <?php if (isset($is_liked) && !$is_liked) : ?>
                 <div class="row">
@@ -150,6 +154,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) { // ADD NE
         <?php else : ?>
             $(document).ready(function() {
                 $('#like')
-            })
+            });
         <?php endif; ?>
+
     </script>
